@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conectadas y Seguras — FINEM Politics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#020410;
+  --orange:#F97316;
+  --orange-light:#FB923C;
+  --purple:#7C3AED;
+  --teal:#14B8A6;
+  --blue:#3B82F6;
+  --white:#FFFFFF;
+  --slate200:#E2E8F0;
+  --slate300:#CBD5E1;
+  --slate400:#94A3B8;
+  --slate500:#64748B;
+  --glass:rgba(255,255,255,0.04);
+  --glass-border:rgba(255,255,255,0.08);
+}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'DM Sans',sans-serif}
+.deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  padding:60px 80px;
+  background:var(--bg);
+  opacity:0;pointer-events:none;
+  transition:opacity .5s ease, transform .5s ease;
+  transform:translateX(60px);
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.exit{opacity:0;transform:translateX(-60px)}
+
+/* BLOBS */
+.blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+.b1{width:600px;height:600px;top:-200px;right:-100px;background:radial-gradient(circle,rgba(249,115,22,.18) 0%,transparent 70%)}
+.b2{width:500px;height:500px;bottom:-150px;left:-100px;background:radial-gradient(circle,rgba(124,58,237,.15) 0%,transparent 70%)}
+.b3{width:400px;height:400px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(20,184,166,.08) 0%,transparent 70%)}
+
+/* CONTENT LAYER */
+.content{position:relative;z-index:1;width:100%;max-width:1100px}
+
+/* PROGRESS BAR */
+#progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--orange-light));z-index:100;transition:width .4s ease}
+
+/* NAV */
+#nav{position:fixed;bottom:36px;right:48px;display:flex;align-items:center;gap:16px;z-index:100}
+.nav-btn{
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.04);
+  color:var(--white);cursor:pointer;
+  font-size:18px;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;backdrop-filter:blur(10px)
+}
+.nav-btn:hover{background:var(--orange);border-color:var(--orange)}
+#counter{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--slate400);letter-spacing:.08em}
+
+/* LOGO */
+#logo{position:fixed;bottom:38px;left:48px;z-index:100;opacity:.5}
+#logo svg{width:60px}
+
+/* LABEL */
+.label{font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:14px;font-weight:500}
+
+/* TYPOGRAPHY */
+h1{font-family:'Syne',sans-serif;font-size:clamp(44px,5.5vw,72px);font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-.03em}
+h2{font-family:'Syne',sans-serif;font-size:clamp(30px,3.5vw,48px);font-weight:700;color:var(--white);line-height:1.1;letter-spacing:-.02em}
+h3{font-family:'Syne',sans-serif;font-size:clamp(18px,2vw,26px);font-weight:700;color:var(--white);line-height:1.2}
+p{font-size:16px;color:var(--slate400);line-height:1.7;font-weight:300}
+.p-big{font-size:clamp(16px,1.6vw,20px);color:var(--slate200);line-height:1.65;font-weight:300}
+.accent{color:var(--orange)}
+.accent-teal{color:var(--teal)}
+.accent-purple{color:var(--purple)}
+em{font-style:normal;color:var(--white);font-weight:500}
+
+/* CARDS */
+.glass-card{
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:16px;
+  padding:28px 32px;
+  backdrop-filter:blur(10px)
+}
+.orange-card{
+  background:rgba(249,115,22,.08);
+  border:1px solid rgba(249,115,22,.25);
+  border-radius:16px;
+  padding:28px 32px
+}
+.teal-card{
+  background:rgba(20,184,166,.08);
+  border:1px solid rgba(20,184,166,.25);
+  border-radius:16px;
+  padding:24px 28px
+}
+.purple-card{
+  background:rgba(124,58,237,.08);
+  border:1px solid rgba(124,58,237,.25);
+  border-radius:16px;
+  padding:24px 28px
+}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;width:100%}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;width:100%}
+
+/* STAT */
+.stat{text-align:center;padding:24px 16px}
+.stat-num{font-family:'Syne',sans-serif;font-size:clamp(36px,4vw,56px);font-weight:800;color:var(--orange);line-height:1}
+.stat-label{font-size:13px;color:var(--slate400);margin-top:8px;line-height:1.4}
+
+/* DIVIDER LINE */
+.line{width:60px;height:3px;background:var(--orange);margin:20px 0;border-radius:2px}
+.line-full{width:100%;height:1px;background:var(--glass-border);margin:20px 0}
+
+/* LIST */
+.check-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.check-list li{display:flex;align-items:flex-start;gap:12px;font-size:15px;color:var(--slate200);line-height:1.5}
+.check-list li::before{content:'→';color:var(--orange);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* BADGE */
+.badge{display:inline-block;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.badge-orange{background:rgba(249,115,22,.15);color:var(--orange);border:1px solid rgba(249,115,22,.3)}
+.badge-teal{background:rgba(20,184,166,.15);color:var(--teal);border:1px solid rgba(20,184,166,.3)}
+.badge-purple{background:rgba(124,58,237,.15);color:#A78BFA;border:1px solid rgba(124,58,237,.3)}
+
+/* QUOTE */
+blockquote{
+  border-left:3px solid var(--orange);
+  padding:16px 24px;
+  background:rgba(249,115,22,.05);
+  border-radius:0 12px 12px 0;
+  font-size:clamp(15px,1.5vw,19px);
+  color:var(--slate200);
+  line-height:1.65;
+  font-style:italic;
+  font-weight:300
+}
+
+/* AGENDA STEPS */
+.step{display:flex;gap:20px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--glass-border)}
+.step:last-child{border-bottom:none}
+.step-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--orange);flex-shrink:0;width:36px}
+.step-info h4{font-size:15px;color:var(--white);font-weight:500;margin-bottom:2px}
+.step-info p{font-size:13px;color:var(--slate500)}
+.step-time{margin-left:auto;font-size:12px;color:var(--slate500);flex-shrink:0;padding-top:2px}
+
+/* PROMPT BOX */
+.prompt-box{
+  background:rgba(15,20,40,.8);
+  border:1px solid var(--glass-border);
+  border-radius:12px;
+  padding:16px 20px;
+  font-family:'Courier New',monospace;
+  font-size:13px;
+  color:var(--teal);
+  line-height:1.6
+}
+.prompt-label{font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--slate500);margin-bottom:8px}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate500);padding:10px 16px;text-align:left;border-bottom:1px solid var(--glass-border)}
+.data-table td{font-size:14px;color:var(--slate200);padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table td:first-child{color:var(--white);font-weight:400}
+
+/* BIG QUOTE SLIDE */
+.big-quote{font-family:'Syne',sans-serif;font-size:clamp(22px,2.8vw,38px);font-weight:700;color:var(--white);line-height:1.3;text-align:center}
+
+/* TOOL HEADER */
+.tool-header{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.tool-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.tool-icon.orange{background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3)}
+.tool-icon.teal{background:rgba(20,184,166,.15);border:1px solid rgba(20,184,166,.3)}
+.tool-icon.purple{background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3)}
+
+/* CASO CARD */
+.caso-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:22px 26px;position:relative;overflow:hidden}
+.caso-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.caso-card.c1::before{background:var(--orange)}
+.caso-card.c2::before{background:var(--teal)}
+.caso-card.c3::before{background:var(--purple)}
+.caso-card.c4::before{background:var(--blue)}
+.caso-num{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--slate500);margin-bottom:6px}
+.caso-title{font-size:15px;color:var(--white);font-weight:500;margin-bottom:8px}
+.caso-body{font-size:13px;color:var(--slate400);line-height:1.55}
+
+/* KIT ITEM */
+.kit-item{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px}
+.kit-num{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--orange);flex-shrink:0;width:32px;line-height:1}
+.kit-text h4{font-size:14px;color:var(--white);font-weight:500}
+.kit-text p{font-size:12px;color:var(--slate500);margin-top:2px}
+
+/* COVER SPECIFIC */
+.cover-tag{font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:rgba(249,115,22,.7);margin-bottom:24px}
+.cover-title{font-family:'Syne',sans-serif;font-size:clamp(52px,6.5vw,88px);font-weight:800;color:var(--white);line-height:.95;letter-spacing:-.04em;margin-bottom:10px}
+.cover-sub{font-family:'Syne',sans-serif;font-size:clamp(16px,1.8vw,22px);font-weight:400;color:var(--orange);letter-spacing:.02em}
+.cover-divider{width:80px;height:4px;background:var(--orange);margin:32px 0;border-radius:2px}
+.cover-desc{font-size:15px;color:var(--slate400);max-width:560px;line-height:1.7}
+.cover-meta{display:flex;gap:32px;margin-top:40px}
+.cover-meta-item p{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--slate500)}
+.cover-meta-item span{font-size:15px;color:var(--white);font-weight:500;display:block;margin-top:4px}
+
+/* ICON CIRCLE */
+.icon-circle{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px}
+.ic-orange{background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.25)}
+.ic-teal{background:rgba(20,184,166,.12);border:1px solid rgba(20,184,166,.25)}
+.ic-purple{background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25)}
+
+/* CLOSING */
+.closing-frase{font-family:'Syne',sans-serif;font-size:clamp(20px,2.5vw,32px);font-weight:700;color:var(--white);text-align:center;line-height:1.35;max-width:800px;margin:0 auto}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.slide.active .content > *{animation:fadeUp .5s ease both}
+.slide.active .content > *:nth-child(1){animation-delay:.05s}
+.slide.active .content > *:nth-child(2){animation-delay:.12s}
+.slide.active .content > *:nth-child(3){animation-delay:.19s}
+.slide.active .content > *:nth-child(4){animation-delay:.26s}
+.slide.active .content > *:nth-child(5){animation-delay:.33s}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- LOGO FINEM -->
+<div id="logo">
+<svg viewBox="0 0 1664.2 706.9" xmlns="http://www.w3.org/2000/svg" fill="white">
+  <path d="M335.7,166.9h-133.6c0-18.8-15.3-34-34.2-34s-34.2,15.2-34.2,34h-.1v506c0,18.7-15.3,33.9-34.1,33.9H0V170.4C0,79.5,71.7,2.6,163.1,0c94.9-2.6,172.6,73,172.6,166.8Z"/>
+  <path d="M740,504v201.4h-99.3c-18.9,0-34.2-15.3-34.2-34.1v-167.3h-.1c0-18.7-15.3-34-34.2-34s-34.2,15.3-34.2,34h-.1v35.1c0,80.5-57.3,147.6-133.5,163.4-11.1,2.3-22.6,3.5-34.4,3.5s-23.2-1.2-34.2-3.5c-74.5-15.3-130.9-79.7-133.5-157.7v-172.7h133.5v167c0,18.8,15.3,34,34.2,34s34.2-15.2,34.2-34h.1v-31.6c0-91,71.8-167.9,163.2-170.3,94.8-2.5,172.5,73.1,172.5,166.8Z"/>
+  <path d="M268.9,304.4c18.9,0,34.2-15.2,34.2-34s-15.3-34-34.2-34-34.2,15.2-34.2,34,15.3,34,34.2,34Z"/>
+  <path d="M1664.2,507.9v197.9h-99.3c-18.9,0-34.2-15.2-34.2-34v-167.4h-.1c0-18.7-15.3-34-34.2-34s-34.2,15.3-34.2,34h-.1v201.4h-133.5v-201.4h-.1c0-18.7-15.3-34-34.2-34s-34.2,15.3-34.2,34h-.1v201.4h-99.4c-18.8,0-34.1-15.2-34.1-33.9v-163.9c0-92.4,74-169.9,166.9-170.4,38.3-.2,73.7,12.4,102,33.6,28.3-21.3,63.7-33.8,102-33.6,92.9.5,166.9,78,166.9,170.4Z"/>
+  <path d="M1087.1,624s0,.1-.1.2c-.2.4-.5.7-.7,1.1-14.4,23.6-34.6,43.4-58.6,57.4-.7.4-1.3.9-2,1.2-.6.4-1.3.8-2,1.1-24,13.3-51.6,20.8-81,20.8-92.8,0-168-74.8-168-167.1s64.2-155.5,147-165.8h0c6.9-.9,13.8-1.3,20.9-1.3s14.1.4,20.9,1.3h0c55,6.8,101.8,40.1,127,86.6l-113.9,79-43.2,29.9-10.8,7.5h0c-8.7,6.3-14.3,16.3-14.3,27.8,0,18.8,15.3,34,34.2,34s1.8,0,2.6-.1c.9,0,1.8-.2,2.6-.3.8-.1,1.6-.3,2.4-.5h.2c.8-.2,1.6-.4,2.4-.7.8-.3,1.6-.5,2.4-.9.8-.3,1.6-.6,2.3-1,1.5-.7,3-1.5,4.3-2.5l1.6-1.1,73.5-51,2.1-1.4c10.6-6.7,24.4-7.4,36-.6,16.2,9.5,21.5,30.3,12,46.5Z"/>
+</svg>
+</div>
+
+<!-- NAV -->
+<div id="nav">
+  <span id="counter">1 / 20</span>
+  <button class="nav-btn" id="prev">&#8592;</button>
+  <button class="nav-btn" id="next">&#8594;</button>
+</div>
+
+<div class="deck" id="deck">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 1 — PORTADA -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide active" data-slide="1">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="content">
+    <p class="cover-tag">FINEM Politics × PAN Quintana Roo</p>
+    <h1 class="cover-title">CONECTADAS<br><span class="accent">Y SEGURAS</span></h1>
+    <p class="cover-sub">Domina las Redes e Inteligencia Artificial<br>para Protegerte y Crecer</p>
+    <div class="cover-divider"></div>
+    <p class="cover-desc">Taller práctico para mujeres afiliadas al Partido Acción Nacional de Quintana Roo — herramientas reales para un mundo digital.</p>
+    <div class="cover-meta">
+      <div class="cover-meta-item"><p>Duración</p><span>2 horas</span></div>
+      <div class="cover-meta-item"><p>Modalidad</p><span>Presencial</span></div>
+      <div class="cover-meta-item"><p>Material</p><span>Tu celular</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 2 — AGENDA -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="2">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="content" style="max-width:860px">
+    <p class="label">Agenda del taller</p>
+    <h2>Lo que vamos a<br><span class="accent">construir hoy</span></h2>
+    <div class="line"></div>
+    <div style="margin-top:10px">
+      <div class="step">
+        <span class="step-num">00</span>
+        <div class="step-info"><h4>Encendido</h4><p>Rompemos el mito del "yo no sé de tecnología"</p></div>
+        <span class="step-time">10 min</span>
+      </div>
+      <div class="step">
+        <span class="step-num">01</span>
+        <div class="step-info"><h4>El terreno que pisamos</h4><p>Tu huella digital y los riesgos reales para mujeres en política</p></div>
+        <span class="step-time">20 min</span>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div class="step-info"><h4>La IA llegó a tu colonia</h4><p>Qué es, cómo nos afecta y cómo detectar lo falso</p></div>
+        <span class="step-time">25 min</span>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div class="step-info"><h4>De víctimas a estrategas</h4><p>Usa la IA para comunicar, protegerte y crecer</p></div>
+        <span class="step-time">25 min</span>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <div class="step-info"><h4>Laboratorio Conectadas</h4><p>Casos reales, soluciones en equipo</p></div>
+        <span class="step-time">25 min</span>
+      </div>
+      <div class="step">
+        <span class="step-num">05</span>
+        <div class="step-info"><h4>Cierre y compromiso</h4><p>Mi primer paso + Kit Digital</p></div>
+        <span class="step-time">15 min</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 3 — PREGUNTA APERTURA -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="3">
+  <div class="blob b1"></div><div class="blob b3"></div>
+  <div class="content" style="text-align:center;max-width:900px">
+    <p class="label" style="text-align:center">Bloque 00 — Encendido</p>
+    <h2 class="big-quote" style="font-size:clamp(28px,4vw,54px)">
+      ¿Revisaste tu teléfono<br>esta mañana antes de<br>levantarte de la cama?
+    </h2>
+    <div style="margin:40px auto;width:fit-content">
+      <p class="p-big" style="color:var(--slate400);text-align:center">Levanta la mano...</p>
+    </div>
+    <div class="grid3" style="margin-top:20px">
+      <div class="glass-card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">📱</div>
+        <p style="font-size:13px;color:var(--slate400);line-height:1.5">¿Revisas tu teléfono <em>más de 10 veces</em> al día?</p>
+      </div>
+      <div class="glass-card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">📍</div>
+        <p style="font-size:13px;color:var(--slate400);line-height:1.5">¿Tienes la <em>ubicación activada</em> ahora mismo?</p>
+      </div>
+      <div class="glass-card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">🎙️</div>
+        <p style="font-size:13px;color:var(--slate400);line-height:1.5">¿Sabes cuántas apps tienen acceso a tu <em>micrófono</em>?</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 4 — DATO SORPRESA -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="4">
+  <div class="blob b2"></div><div class="blob b1"></div>
+  <div class="content" style="max-width:960px">
+    <p class="label">El dato que nadie te contó</p>
+    <div class="grid2" style="align-items:center;gap:48px">
+      <div>
+        <div class="stat-num" style="font-family:'Syne',sans-serif;font-size:clamp(64px,8vw,100px);font-weight:800;color:var(--orange);line-height:1">4 hrs</div>
+        <div style="font-family:'Syne',sans-serif;font-size:22px;color:var(--orange-light);margin-bottom:20px">12 minutos</div>
+        <p class="p-big">En promedio, las mujeres en México pasan <em>4 horas y 12 minutos al día</em> en redes sociales.</p>
+        <div class="line"></div>
+        <p style="color:var(--slate500);font-size:14px">Eso equivale a <em style="color:var(--orange)">más de 60 días al año</em> compartiendo datos que no sabemos que estamos dando.</p>
+      </div>
+      <div>
+        <blockquote>
+          "Tu celular es la herramienta más poderosa que tienes en la mano. La pregunta es: ¿tú la usas a ella — o ella te usa a ti?"
+        </blockquote>
+        <div style="margin-top:20px;padding:20px;background:rgba(249,115,22,.06);border-radius:12px;border:1px solid rgba(249,115,22,.15)">
+          <p style="font-size:13px;color:var(--slate400);line-height:1.6">El problema no es que no sepas de tecnología. El problema es que <em>nadie te ha explicado las reglas del juego.</em> Eso cambia hoy.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 5 — HUELLA DIGITAL -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="5">
+  <div class="blob b2"></div><div class="blob b3"></div>
+  <div class="content" style="max-width:980px">
+    <p class="label">Bloque 01 — El terreno que pisamos</p>
+    <h2>Tu <span class="accent">huella digital</span></h2>
+    <p class="p-big" style="max-width:680px;margin:14px 0 28px">Cada vez que abres una app, posteas una foto o usas el GPS, dejas información sobre ti — aunque no te des cuenta.</p>
+    <div class="grid3">
+      <div class="glass-card">
+        <div class="badge badge-orange" style="margin-bottom:12px">Datos obvios</div>
+        <ul class="check-list">
+          <li>Nombre y foto de perfil</li>
+          <li>Número de teléfono</li>
+          <li>Correo electrónico</li>
+          <li>Ciudad donde vives</li>
+        </ul>
+      </div>
+      <div class="glass-card">
+        <div class="badge badge-teal" style="margin-bottom:12px">Datos que no notas</div>
+        <ul class="check-list">
+          <li>Ubicación en tiempo real</li>
+          <li>Horario en que publicas</li>
+          <li>Con quién hablas más</li>
+          <li>Qué temas te interesan</li>
+        </ul>
+      </div>
+      <div class="glass-card">
+        <div class="badge badge-purple" style="margin-bottom:12px">Datos inferidos</div>
+        <ul class="check-list">
+          <li>Estado emocional</li>
+          <li>Nivel socioeconómico</li>
+          <li>Afiliación política</li>
+          <li>Rutinas diarias</li>
+        </ul>
+      </div>
+    </div>
+    <blockquote style="margin-top:22px">"Imagina que caminas por una playa de arena blanca. Cada paso deja huella — no a propósito, simplemente caminas. En internet pasa exactamente lo mismo."</blockquote>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 6 — DATOS VIOLENCIA DIGITAL -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="6">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="content" style="max-width:1000px">
+    <p class="label">La realidad que enfrentamos</p>
+    <h2>Violencia digital contra<br><span class="accent">mujeres en política</span></h2>
+    <div class="grid4" style="margin-top:32px">
+      <div class="stat glass-card">
+        <div class="stat-num">#1</div>
+        <p class="stat-label">México en LATAM en violencia política digital contra mujeres</p>
+      </div>
+      <div class="stat glass-card">
+        <div class="stat-num">7/10</div>
+        <p class="stat-label">mujeres políticas en México han recibido ataques en redes</p>
+      </div>
+      <div class="stat glass-card">
+        <div class="stat-num" style="font-size:clamp(28px,3vw,42px)">62%</div>
+        <p class="stat-label">de los ataques ocurren en Facebook y WhatsApp</p>
+      </div>
+      <div class="stat glass-card">
+        <div class="stat-num" style="font-size:clamp(28px,3vw,42px)">85%</div>
+        <p class="stat-label">de las mujeres no sabe que sus apps tienen acceso a su micrófono</p>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:20px">
+      <div class="orange-card">
+        <h3 style="font-size:15px;margin-bottom:10px">Tipos de ataques más comunes</h3>
+        <ul class="check-list">
+          <li>Acoso digital coordinado con bots</li>
+          <li>Suplantación de identidad</li>
+          <li>Doxing — exposición de datos privados</li>
+        </ul>
+      </div>
+      <div class="purple-card">
+        <h3 style="font-size:15px;margin-bottom:10px">¿Cuál es su objetivo?</h3>
+        <ul class="check-list" style="--orange:var(--purple)">
+          <li style="--orange:#A78BFA">Intimidarte para que dejes de participar</li>
+          <li style="--orange:#A78BFA">Dañar tu reputación antes de elecciones</li>
+          <li style="--orange:#A78BFA">Silenciar tu voz política</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 7 — HERRAMIENTA 1 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="7">
+  <div class="blob b3"></div><div class="blob b1"></div>
+  <div class="content" style="max-width:960px">
+    <div class="tool-header">
+      <div class="tool-icon orange">🛡️</div>
+      <div>
+        <p class="label" style="margin-bottom:2px">Herramienta #1</p>
+        <h2 style="font-size:clamp(22px,2.5vw,34px)">Checklist de privacidad <span class="accent">en 5 minutos</span></h2>
+      </div>
+    </div>
+    <p style="margin-bottom:22px;color:var(--slate400)">Revisa esto HOY en tu teléfono antes de salir de aquí</p>
+    <div class="grid3">
+      <div class="glass-card">
+        <p style="font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;font-weight:500">Facebook</p>
+        <ul class="check-list">
+          <li>Privacidad → ¿Quién ve mis posts? → <em>Solo amigos</em></li>
+          <li>Ubicación → Desactivar historial</li>
+          <li>Apps conectadas → Eliminar desconocidas</li>
+        </ul>
+      </div>
+      <div class="glass-card">
+        <p style="font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:12px;font-weight:500">WhatsApp</p>
+        <ul class="check-list" style="--chk-color:var(--teal)">
+          <li>Foto de perfil → <em>Solo mis contactos</em></li>
+          <li>Última vez → <em>Nadie</em></li>
+          <li>Verificación en 2 pasos → <em>Activar siempre</em></li>
+        </ul>
+      </div>
+      <div class="glass-card">
+        <p style="font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#A78BFA;margin-bottom:12px;font-weight:500">Tu teléfono</p>
+        <ul class="check-list">
+          <li>Revisar permisos de micrófono por app</li>
+          <li>Desactivar ubicación en la cámara</li>
+          <li>Instagram → Cuenta privada → <em>Activar</em></li>
+        </ul>
+      </div>
+    </div>
+    <div class="orange-card" style="margin-top:18px;display:flex;align-items:center;gap:16px">
+      <span style="font-size:22px">⚡</span>
+      <p style="color:var(--white);font-size:14px">Abre tu teléfono ahora. En 5 minutos puedes cerrar las puertas que estaban abiertas sin que lo supieras.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 8 — QUÉ ES LA IA -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="8">
+  <div class="blob b2"></div><div class="blob b3"></div>
+  <div class="content" style="max-width:980px">
+    <p class="label">Bloque 02 — La IA llegó a tu colonia</p>
+    <h2>La <span class="accent">Inteligencia Artificial</span><br>ya está en tu vida</h2>
+    <p class="p-big" style="margin:14px 0 28px;max-width:620px">No es un robot del futuro. Es un programa que ya está en tu teléfono, <em>ahora mismo.</em></p>
+    <div class="grid3">
+      <div class="glass-card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">🎵</div>
+        <h3 style="font-size:14px;margin-bottom:6px">TikTok y Reels</h3>
+        <p style="font-size:13px;color:var(--slate500)">El algoritmo predice exactamente qué video te va a enganchar después</p>
+      </div>
+      <div class="glass-card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">🗺️</div>
+        <h3 style="font-size:14px;margin-bottom:6px">Google Maps</h3>
+        <p style="font-size:13px;color:var(--slate500)">Optimiza rutas en tiempo real considerando miles de variables</p>
+      </div>
+      <div class="glass-card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">🛒</div>
+        <h3 style="font-size:14px;margin-bottom:6px">Publicidad en FB</h3>
+        <p style="font-size:13px;color:var(--slate500)">Sabe tus intereses mejor que tú misma basándose en tu comportamiento</p>
+      </div>
+      <div class="glass-card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">💬</div>
+        <h3 style="font-size:14px;margin-bottom:6px">Chatbots de bancos</h3>
+        <p style="font-size:13px;color:var(--slate500)">Simulan conversación humana para atender millones de clientes</p>
+      </div>
+      <div class="glass-card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">📸</div>
+        <h3 style="font-size:14px;margin-bottom:6px">Filtros de belleza</h3>
+        <p style="font-size:13px;color:var(--slate500)">Reconocimiento facial en tiempo real para alterar tu apariencia</p>
+      </div>
+      <div class="glass-card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">✉️</div>
+        <h3 style="font-size:14px;margin-bottom:6px">Carpeta de spam</h3>
+        <p style="font-size:13px;color:var(--slate500)">IA que detecta patrones de fraude antes de que leas el correo</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 9 — DEEPFAKES -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="9">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="content" style="max-width:980px">
+    <p class="label">La IA como amenaza</p>
+    <h2>Armas digitales contra<br><span class="accent">mujeres políticas</span></h2>
+    <div class="grid2" style="margin-top:28px;gap:22px">
+      <div>
+        <div class="orange-card" style="margin-bottom:16px">
+          <h3 style="font-size:16px;margin-bottom:10px">🎭 Deepfakes</h3>
+          <p style="font-size:13px;line-height:1.6;color:var(--slate300)">Videos o audios <em>100% falsos</em> generados por IA que ponen palabras en boca de alguien que nunca las dijo. Se producen en menos de 30 minutos.</p>
+          <div class="line-full"></div>
+          <p style="font-size:12px;color:var(--orange)">78% de los deepfakes políticos en México tienen a mujeres como objetivo</p>
+        </div>
+        <div class="purple-card">
+          <h3 style="font-size:16px;margin-bottom:10px">🤖 Bots coordinados</h3>
+          <p style="font-size:13px;line-height:1.6;color:var(--slate300)">Una persona puede operar <em>miles de cuentas falsas</em> al mismo tiempo para inundar los comentarios con ataques en segundos.</p>
+        </div>
+      </div>
+      <div>
+        <div class="teal-card" style="margin-bottom:16px">
+          <h3 style="font-size:16px;margin-bottom:10px;color:var(--teal)">📢 Algoritmos que amplifican odio</h3>
+          <p style="font-size:13px;line-height:1.6;color:var(--slate300)">Las plataformas priorizan contenido que genera reacción emocional. Los ataques contra mujeres se propagan <em>3.4 veces más rápido</em> que cualquier mensaje positivo.</p>
+        </div>
+        <div class="glass-card">
+          <h3 style="font-size:16px;margin-bottom:10px">📧 Voice cloning</h3>
+          <p style="font-size:13px;line-height:1.6;color:var(--slate400)">Con apenas 3 segundos de audio, la IA puede clonar cualquier voz y crear mensajes de audio falsos que suenan completamente reales.</p>
+          <div class="line-full"></div>
+          <p style="font-size:12px;color:var(--slate500)">Caso real México 2024: audios falsos de candidatas circularon días antes de elecciones</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 10 — DINÁMICA REAL O FALSO -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="10">
+  <div class="blob b3"></div><div class="blob b1"></div>
+  <div class="content" style="max-width:960px;text-align:center">
+    <p class="label" style="text-align:center">Dinámica grupal</p>
+    <h2 style="text-align:center">¿ <span class="accent">Real</span> o <span style="color:var(--teal)">Falso</span> ?</h2>
+    <p class="p-big" style="text-align:center;margin:14px auto 32px;max-width:600px">Vamos a ver 5 casos. Vota con tu mano: <em style="color:var(--orange)">puño cerrado = Real</em> / <em style="color:var(--teal)">palma abierta = Falso</em></p>
+    <div class="grid3" style="text-align:left">
+      <div class="caso-card c1">
+        <p class="caso-num">Caso 01</p>
+        <p class="caso-title">Foto de candidata</p>
+        <p class="caso-body">Imagen de una funcionaria en un lugar donde nunca estuvo, celebrando con personas sospechosas</p>
+      </div>
+      <div class="caso-card c2">
+        <p class="caso-num">Caso 02</p>
+        <p class="caso-title">Noticia viral</p>
+        <p class="caso-body">Titular de "renuncia escandalosa" con cita textual atribuida a una candidata del PAN</p>
+      </div>
+      <div class="caso-card c3">
+        <p class="caso-num">Caso 03</p>
+        <p class="caso-title">Audio de voz</p>
+        <p class="caso-body">Mensaje de voz de una política diciendo algo escandaloso, reenviado en grupos de WhatsApp</p>
+      </div>
+      <div class="caso-card c1" style="--orange:var(--blue)">
+        <p class="caso-num">Caso 04</p>
+        <p class="caso-title">Comentarios en FB</p>
+        <p class="caso-body">Cientos de comentarios negativos idénticos aparecen en minutos bajo una publicación</p>
+      </div>
+      <div class="caso-card c2">
+        <p class="caso-num">Caso 05</p>
+        <p class="caso-title">Imagen noticiosa</p>
+        <p class="caso-body">Fotografía periodística de un evento político reciente — sin edición aparente</p>
+      </div>
+      <div class="glass-card" style="display:flex;align-items:center;justify-content:center;min-height:120px">
+        <div style="text-align:center">
+          <div style="font-size:32px;margin-bottom:8px">🧠</div>
+          <p style="font-size:13px;color:var(--orange)">¡Confía en tus instintos!<br>El objetivo es aprender a dudar.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 11 — SEÑALES DE CONTENIDO FALSO -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="11">
+  <div class="blob b2"></div><div class="blob b3"></div>
+  <div class="content" style="max-width:980px">
+    <p class="label">Lo que delata a la IA</p>
+    <h2>Señales para detectar<br><span class="accent">contenido falso</span></h2>
+    <div class="grid4" style="margin-top:24px">
+      <div class="glass-card">
+        <div style="font-size:20px;margin-bottom:10px">🖼️</div>
+        <h3 style="font-size:14px;margin-bottom:10px;color:var(--orange)">En imágenes</h3>
+        <ul class="check-list" style="gap:8px">
+          <li style="font-size:13px">Manos con 6 dedos o deformes</li>
+          <li style="font-size:13px">Orejas asimétricas</li>
+          <li style="font-size:13px">Texto dentro con letras raras</li>
+          <li style="font-size:13px">Fondo borroso sin sentido</li>
+        </ul>
+      </div>
+      <div class="glass-card">
+        <div style="font-size:20px;margin-bottom:10px">🎬</div>
+        <h3 style="font-size:14px;margin-bottom:10px;color:var(--teal)">En videos</h3>
+        <ul class="check-list" style="gap:8px">
+          <li style="font-size:13px">Parpadeo extraño o ausente</li>
+          <li style="font-size:13px">Boca que no sincroniza</li>
+          <li style="font-size:13px">Bordes del cabello que tiemblan</li>
+          <li style="font-size:13px">Iluminación inconsistente</li>
+        </ul>
+      </div>
+      <div class="glass-card">
+        <div style="font-size:20px;margin-bottom:10px">🔊</div>
+        <h3 style="font-size:14px;margin-bottom:10px;color:#A78BFA">En audios</h3>
+        <ul class="check-list" style="gap:8px">
+          <li style="font-size:13px">Tono monótono sin variaciones</li>
+          <li style="font-size:13px">Palabras "pegadas" de forma rara</li>
+          <li style="font-size:13px">Sin sonido ambiental de fondo</li>
+          <li style="font-size:13px">Voz no cambia con la emoción</li>
+        </ul>
+      </div>
+      <div class="glass-card">
+        <div style="font-size:20px;margin-bottom:10px">📰</div>
+        <h3 style="font-size:14px;margin-bottom:10px;color:var(--blue)">En noticias</h3>
+        <ul class="check-list" style="gap:8px">
+          <li style="font-size:13px">URL extraña o desconocida</li>
+          <li style="font-size:13px">Ningún medio formal la cubre</li>
+          <li style="font-size:13px">Titular demasiado escandaloso</li>
+          <li style="font-size:13px">Cita sin link al contexto</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 12 — HERRAMIENTA 2 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="12">
+  <div class="blob b1"></div><div class="blob b3"></div>
+  <div class="content" style="max-width:920px">
+    <div class="tool-header">
+      <div class="tool-icon teal">🕵️</div>
+      <div>
+        <p class="label" style="margin-bottom:2px">Herramienta #2</p>
+        <h2 style="font-size:clamp(22px,2.5vw,34px)"><span class="accent-teal">Pausa antes de compartir</span> — 3 pasos</h2>
+      </div>
+    </div>
+    <p style="margin-bottom:28px;color:var(--slate400)">Antes de reenviar cualquier noticia, imagen o audio</p>
+    <div class="grid3" style="gap:16px">
+      <div class="teal-card">
+        <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:var(--teal);opacity:.3;line-height:1;margin-bottom:8px">01</div>
+        <h3 style="font-size:16px;margin-bottom:10px">¿Quién lo dice?</h3>
+        <p style="font-size:13px;line-height:1.6;color:var(--slate400)">Busca el nombre del medio en Google. Si no existe o la URL tiene caracteres raros, es sospechoso.</p>
+      </div>
+      <div class="teal-card">
+        <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:var(--teal);opacity:.3;line-height:1;margin-bottom:8px">02</div>
+        <h3 style="font-size:16px;margin-bottom:10px">¿Lo dice alguien más?</h3>
+        <p style="font-size:13px;line-height:1.6;color:var(--slate400)">Si es verdad, al menos 2 o 3 medios conocidos lo cubren. Si solo lo tiene un grupo de WhatsApp... probablemente es falso.</p>
+      </div>
+      <div class="teal-card">
+        <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:var(--teal);opacity:.3;line-height:1;margin-bottom:8px">03</div>
+        <h3 style="font-size:16px;margin-bottom:10px">¿Tiene fecha y contexto?</h3>
+        <p style="font-size:13px;line-height:1.6;color:var(--slate400)">Muchas noticias falsas son reales pero viejas, sacadas de contexto. Verifica que la fecha corresponda.</p>
+      </div>
+    </div>
+    <div class="glass-card" style="margin-top:18px">
+      <p style="font-size:13px;color:var(--slate400);margin-bottom:10px;letter-spacing:.1em;text-transform:uppercase;font-size:11px">Herramientas gratuitas para verificar</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <span class="badge badge-teal">Google Imágenes</span>
+        <span class="badge badge-teal">TinEye.com</span>
+        <span class="badge badge-teal">verificado.mx</span>
+        <span class="badge badge-teal">El Sabueso — Animal Político</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 13 — DE VÍCTIMAS A ESTRATEGAS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="13">
+  <div class="blob b2"></div><div class="blob b1"></div>
+  <div class="content" style="max-width:960px;text-align:center">
+    <p class="label" style="text-align:center">Bloque 03 — El giro</p>
+    <h2 class="big-quote" style="font-size:clamp(28px,3.8vw,52px)">
+      Si los que atacan a las mujeres<br>en política usan IA para hacer daño...
+    </h2>
+    <div style="margin:28px auto">
+      <div style="width:3px;height:60px;background:linear-gradient(180deg,transparent,var(--orange));margin:0 auto"></div>
+    </div>
+    <h2 class="big-quote" style="font-size:clamp(28px,3.8vw,52px);color:var(--orange)">
+      ¿por qué no usar la misma IA<br>para defenderse y crecer?
+    </h2>
+    <div style="margin-top:40px;display:flex;justify-content:center;gap:24px;flex-wrap:wrap">
+      <span class="badge badge-orange" style="font-size:13px;padding:10px 20px">Comunicar mejor</span>
+      <span class="badge badge-orange" style="font-size:13px;padding:10px 20px">Responder ataques</span>
+      <span class="badge badge-orange" style="font-size:13px;padding:10px 20px">Visibilizar tu trabajo</span>
+      <span class="badge badge-orange" style="font-size:13px;padding:10px 20px">Proteger tu información</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 14 — CHATGPT EN ACCIÓN -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="14">
+  <div class="blob b3"></div><div class="blob b2"></div>
+  <div class="content" style="max-width:1000px">
+    <p class="label">Demo en vivo — ChatGPT como tu asistente</p>
+    <h2>La IA trabaja<br><span class="accent">para ti</span></h2>
+    <div class="grid3" style="margin-top:24px">
+      <div>
+        <p class="prompt-label">Invitar a un evento</p>
+        <div class="prompt-box">"Escribe un mensaje de WhatsApp para invitar a mujeres de mi colonia a una reunión del PAN este sábado a las 5pm. Tono cercano y motivador, máximo 3 líneas."</div>
+        <div class="teal-card" style="margin-top:12px;padding:14px 16px">
+          <p style="font-size:12px;color:var(--slate400);margin-bottom:6px">Resultado en 3 segundos:</p>
+          <p style="font-size:13px;color:var(--white);line-height:1.6;font-style:italic">"¡Hola! Este sábado 5pm te invito a nuestra reunión en [lugar]. Vamos a hablar de lo que más nos importa en nuestra comunidad. ¡Tu voz hace la diferencia! 🤝"</p>
+        </div>
+      </div>
+      <div>
+        <p class="prompt-label">Responder un ataque</p>
+        <div class="prompt-box">"Me escribieron: 'Esa candidata es una corrupta que no ha hecho nada'. Dame una respuesta profesional, sin insultos, que cierre el tema. Máximo 2 líneas."</div>
+        <div class="teal-card" style="margin-top:12px;padding:14px 16px">
+          <p style="font-size:12px;color:var(--slate400);margin-bottom:6px">Respuesta con cabeza fría:</p>
+          <p style="font-size:13px;color:var(--white);line-height:1.6;font-style:italic">"Me comprometo con mi trabajo y mis resultados hablan por sí solos. Te invito a revisar [logro concreto] para que puedas juzgar con información real."</p>
+        </div>
+      </div>
+      <div>
+        <p class="prompt-label">Publicar tu trabajo</p>
+        <div class="prompt-box">"Escribe una publicación de Facebook sobre este logro: [describe lo que hiciste]. Que sea humana, cercana y que invite a comentar."</div>
+        <div class="teal-card" style="margin-top:12px;padding:14px 16px">
+          <p style="font-size:12px;color:var(--slate400);margin-bottom:6px">Tu trabajo, visible:</p>
+          <p style="font-size:13px;color:var(--white);line-height:1.6;font-style:italic">La IA convierte tu logro en contenido que la gente quiere compartir.</p>
+        </div>
+      </div>
+    </div>
+    <div class="orange-card" style="margin-top:16px;display:flex;align-items:center;gap:14px;padding:14px 20px">
+      <span style="font-size:18px">💡</span>
+      <p style="font-size:13px;color:var(--white)"><em>ChatGPT.com y Gemini.google.com son gratis.</em> Solo necesitan una cuenta de correo para registrarse.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 15 — APPS DE SEGURIDAD -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="15">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="content" style="max-width:960px">
+    <p class="label">La IA en tu seguridad personal</p>
+    <h2>Apps que <span class="accent">te protegen</span></h2>
+    <p class="p-big" style="margin:14px 0 26px;max-width:620px">Tecnología diseñada para que nunca estés sola ante una emergencia.</p>
+    <table class="data-table" style="margin-bottom:20px">
+      <thead><tr><th>App</th><th>¿Qué hace?</th><th>¿Gratis?</th></tr></thead>
+      <tbody>
+        <tr><td>Noonlight</td><td>Botón de pánico silencioso — alerta a contactos de confianza</td><td><span class="badge badge-teal">Sí</span></td></tr>
+        <tr><td>bSafe</td><td>GPS compartido en tiempo real + grabación de emergencia</td><td><span class="badge badge-teal">Sí</span></td></tr>
+        <tr><td>Google Family Sharing</td><td>Ubicación en tiempo real con personas de confianza</td><td><span class="badge badge-teal">Sí</span></td></tr>
+        <tr><td>Two Factor Authenticator</td><td>Doble verificación para todas tus cuentas importantes</td><td><span class="badge badge-teal">Sí</span></td></tr>
+      </tbody>
+    </table>
+    <div class="orange-card">
+      <h3 style="font-size:15px;margin-bottom:10px">⚡ Configuración de emergencia — hazlo ahora</h3>
+      <p style="font-size:14px;color:var(--slate200);line-height:1.6"><em>Ajustes → Seguridad de emergencia → SOS de emergencia.</em><br>Al presionar el botón de encendido 5 veces, tu teléfono llama al 911 y manda tu ubicación a tus contactos de confianza.</p>
+      <p style="font-size:12px;color:var(--slate500);margin-top:8px">Funciona en iPhone y Android</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 16 — HERRAMIENTA 3 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="16">
+  <div class="blob b3"></div><div class="blob b1"></div>
+  <div class="content" style="max-width:1000px">
+    <div class="tool-header">
+      <div class="tool-icon purple">💬</div>
+      <div>
+        <p class="label" style="margin-bottom:2px">Herramienta #3</p>
+        <h2 style="font-size:clamp(22px,2.5vw,34px)"><span style="color:#A78BFA">5 prompts listos</span> para usar hoy</h2>
+      </div>
+    </div>
+    <p style="margin-bottom:20px;color:var(--slate400);font-size:14px">Copia estos textos en ChatGPT.com o Gemini.google.com — es gratis</p>
+    <div class="grid2" style="gap:14px">
+      <div class="prompt-box">
+        <p class="prompt-label">Prompt 1 — Invitación a evento</p>
+        "Escribe un mensaje de WhatsApp para invitar a [N] mujeres de mi colonia a [evento] el [día] a las [hora]. Tono cercano y motivador. Máximo 4 líneas."
+      </div>
+      <div class="prompt-box">
+        <p class="prompt-label">Prompt 2 — Respuesta a crítica</p>
+        "Me escribieron esto en redes: [pegar comentario]. Escríbeme una respuesta profesional, sin insultos, que deje claro mi posición y cierre el tema."
+      </div>
+      <div class="prompt-box">
+        <p class="prompt-label">Prompt 3 — Publicación de trabajo</p>
+        "Escribe una publicación de Facebook sobre este logro: [describe]. Que sea humana, cercana y que invite a la gente a apoyar."
+      </div>
+      <div class="prompt-box">
+        <p class="prompt-label">Prompt 4 — Verificar si algo es falso</p>
+        "Esta noticia me llegó por WhatsApp: [describe o pega el texto]. ¿Cómo puedo verificar si es real o falso? Dame 3 pasos concretos."
+      </div>
+    </div>
+    <div class="prompt-box" style="margin-top:14px">
+      <p class="prompt-label">Prompt 5 — Preparar un discurso</p>
+      "Ayúdame a preparar un discurso de 2 minutos para hablar con mujeres de mi comunidad sobre [tema]. Que tenga una historia emotiva al inicio, datos en el medio, y una llamada a la acción al final."
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 17 — LABORATORIO -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="17">
+  <div class="blob b2"></div><div class="blob b3"></div>
+  <div class="content" style="max-width:980px">
+    <p class="label">Bloque 04 — Laboratorio Conectadas</p>
+    <h2>En equipos. Casos <span class="accent">reales.</span><br>Soluciones reales.</h2>
+    <p class="p-big" style="margin:12px 0 24px;max-width:620px">8 minutos por equipo para resolver su caso. Luego 2 minutos para compartir su solución.</p>
+    <div class="grid4">
+      <div class="caso-card c1">
+        <p class="caso-num">Caso 01</p>
+        <p class="caso-title">El perfil falso</p>
+        <p class="caso-body">Rosa descubre que alguien creó un perfil con su nombre y foto publicando cosas que ella nunca diría.</p>
+      </div>
+      <div class="caso-card c2">
+        <p class="caso-num">Caso 02</p>
+        <p class="caso-title">La noticia viral</p>
+        <p class="caso-body">Un audio falso de una candidata panista se está reenviando masivamente en grupos de WhatsApp.</p>
+      </div>
+      <div class="caso-card c3">
+        <p class="caso-num">Caso 03</p>
+        <p class="caso-title">El mensaje sospechoso</p>
+        <p class="caso-body">Un número desconocido pide la contraseña del sistema del partido con urgencia de 24 horas.</p>
+      </div>
+      <div class="caso-card c4">
+        <p class="caso-num">Caso 04</p>
+        <p class="caso-title">La candidata atacada</p>
+        <p class="caso-body">La cuenta de Lupita fue inundada con cientos de comentarios coordinados iguales antes de un debate.</p>
+      </div>
+    </div>
+    <div class="glass-card" style="margin-top:18px;display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;gap:24px">
+        <div><p style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--slate500)">Por equipo</p><p style="color:var(--white);font-weight:500">3–4 personas</p></div>
+        <div><p style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--slate500)">Para resolver</p><p style="color:var(--white);font-weight:500">8 minutos</p></div>
+        <div><p style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--slate500)">Para presentar</p><p style="color:var(--white);font-weight:500">2 minutos</p></div>
+      </div>
+      <p style="font-size:13px;color:var(--orange)">Usen los prompts de ChatGPT →</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 18 — RESUMEN 3 HERRAMIENTAS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="18">
+  <div class="blob b1"></div><div class="blob b3"></div>
+  <div class="content" style="max-width:900px">
+    <p class="label">Bloque 05 — Lo que aprendieron hoy</p>
+    <h2>Tres cosas que nadie<br><span class="accent">puede quitarles</span></h2>
+    <div class="grid3" style="margin-top:32px">
+      <div class="orange-card" style="text-align:center">
+        <div style="font-size:36px;margin-bottom:16px">🛡️</div>
+        <h3 style="font-size:16px;margin-bottom:10px">Tu huella digital</h3>
+        <p style="font-size:13px;line-height:1.6;color:var(--slate400)">Saben qué información comparten y cómo controlarla con el checklist de privacidad.</p>
+      </div>
+      <div class="teal-card" style="text-align:center">
+        <div style="font-size:36px;margin-bottom:16px">🕵️</div>
+        <h3 style="font-size:16px;margin-bottom:10px;color:var(--teal)">Detectar lo falso</h3>
+        <p style="font-size:13px;line-height:1.6;color:var(--slate400)">Tienen los 3 pasos para verificar antes de compartir cualquier noticia o audio.</p>
+      </div>
+      <div class="purple-card" style="text-align:center">
+        <div style="font-size:36px;margin-bottom:16px">💬</div>
+        <h3 style="font-size:16px;margin-bottom:10px;color:#A78BFA">La IA como aliada</h3>
+        <p style="font-size:13px;line-height:1.6;color:var(--slate400)">Tienen 5 prompts listos para comunicar, responder y trabajar más inteligente desde hoy.</p>
+      </div>
+    </div>
+    <blockquote style="margin-top:28px;text-align:center;border-left:none;border:1px solid rgba(249,115,22,.25);border-radius:12px;background:rgba(249,115,22,.05)">
+      "Mi primer paso esta semana es <em>________________________</em>"
+    </blockquote>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 19 — KIT DIGITAL -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="19">
+  <div class="blob b2"></div><div class="blob b1"></div>
+  <div class="content" style="max-width:860px">
+    <p class="label">Lo que se llevan hoy</p>
+    <h2>Kit Digital<br><span class="accent">"Conectadas y Seguras"</span></h2>
+    <p style="margin:12px 0 24px;color:var(--slate400)">Disponible impreso y en el grupo de WhatsApp que creamos hoy juntas</p>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="kit-item">
+        <span class="kit-num">01</span>
+        <div class="kit-text"><h4>Checklist de privacidad en redes sociales</h4><p>Para revisar Facebook, WhatsApp e Instagram en 5 minutos</p></div>
+        <span class="badge badge-orange">Hoja A5</span>
+      </div>
+      <div class="kit-item">
+        <span class="kit-num">02</span>
+        <div class="kit-text"><h4>Guía "Pausa antes de compartir"</h4><p>Los 3 pasos visuales para verificar cualquier contenido</p></div>
+        <span class="badge badge-teal">Hoja A5</span>
+      </div>
+      <div class="kit-item">
+        <span class="kit-num">03</span>
+        <div class="kit-text"><h4>5 Prompts listos para ChatGPT</h4><p>Adaptados al contexto de mujeres panistas en Quintana Roo</p></div>
+        <span class="badge badge-purple" style="color:#A78BFA">Hoja A5</span>
+      </div>
+      <div class="kit-item">
+        <span class="kit-num">04</span>
+        <div class="kit-text"><h4>Lista de apps de seguridad recomendadas</h4><p>Con instrucciones de instalación y configuración</p></div>
+        <span class="badge badge-orange">Hoja A5</span>
+      </div>
+      <div class="kit-item">
+        <span class="kit-num">05</span>
+        <div class="kit-text"><h4>QR con recursos PAN + contacto de emergencia digital</h4><p>Red de apoyo y reporte ante violencia política digital</p></div>
+        <span class="badge badge-teal">Reverso</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 20 — CIERRE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="20">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="content" style="max-width:900px;text-align:center">
+    <p class="label" style="text-align:center">Para llevarse a casa</p>
+    <p class="closing-frase">
+      "La participación política de las mujeres<br>
+      <span class="accent">no se detiene por miedo,</span><br>
+      no se silencia con ataques,<br>
+      y no se rinde ante la desinformación."
+    </p>
+    <div style="width:60px;height:3px;background:var(--orange);margin:36px auto;border-radius:2px"></div>
+    <p class="p-big" style="text-align:center;max-width:660px;margin:0 auto 36px">Hoy salieron siendo más capaces que el 95% de la población para navegar el mundo digital. <em>Eso es poder. Úsenlo.</em></p>
+    <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:12px">
+      <span class="badge badge-orange" style="font-size:13px;padding:10px 22px">ChatGPT.com</span>
+      <span class="badge badge-teal" style="font-size:13px;padding:10px 22px">Gemini.google.com</span>
+      <span class="badge badge-orange" style="font-size:13px;padding:10px 22px">verificado.mx</span>
+    </div>
+    <div style="margin-top:44px;padding-top:28px;border-top:1px solid var(--glass-border)">
+      <p style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--slate500)">FINEM Politics × PAN Quintana Roo</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+let cur=0;
+let animating=false;
+
+function go(n){
+  if(animating||n===cur||n<0||n>=total)return;
+  animating=true;
+  slides[cur].classList.add('exit');
+  slides[cur].classList.remove('active');
+  const prev=cur;
+  cur=n;
+  slides[cur].classList.add('active');
+  setTimeout(()=>{slides[prev].classList.remove('exit');animating=false},500);
+  document.getElementById('counter').textContent=(cur+1)+' / '+total;
+  document.getElementById('progress').style.width=((cur+1)/total*100)+'%';
+}
+
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('prev').onclick=()=>go(cur-1);
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')go(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(cur-1);
+});
+
+// Touch swipe
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.changedTouches[0].screenX,{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].screenX-tx;
+  if(Math.abs(dx)>50){dx<0?go(cur+1):go(cur-1)}
+},{passive:true});
+
+// Init progress
+document.getElementById('progress').style.width=(1/total*100)+'%';
+</script>
+</body>
+</html>
