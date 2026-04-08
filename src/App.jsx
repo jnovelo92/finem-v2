@@ -24,6 +24,7 @@ import LaNacionAIProposalF from './pages/quotes/LaNacionAiProposalF';
 import FinemGrowth from './pages/FinemGrowth';
 import ValttivaProposal from './pages/quotes/ValttivaProposal';
 import FinemPoliticsProposal from './pages/quotes/FinemPoliticsProposal';
+import RestaurantCodexProposal from './pages/quotes/RestaurantCodexProposal';
 import ConectadasYSeguras from './pages/ConectadasYSeguras';
 import KitDigitalConectadasSeguras from './pages/KitDigitalConectadasSeguras';
 
@@ -2825,6 +2826,7 @@ const App = () => {
           <Route path="/content-hub/:clientSlug/:month" element={<DynamicContentHub />} />
           <Route path="/quotes/Valttiva" element={<ValttivaProposal />} />
           <Route path="/quotes/FinemPolitics" element={<FinemPoliticsProposal />} />
+          <Route path="/quotes/RestaurantCodex" element={<RestaurantCodexProposal />} />
           <Route path="/conectadas-y-seguras" element={<ConectadasYSeguras />} />
           <Route path="/kit-digital-conectadas-seguras" element={<KitDigitalConectadasSeguras />} />
         </Routes>
