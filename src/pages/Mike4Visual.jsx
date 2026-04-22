@@ -820,9 +820,8 @@ const HeroBlock = () => {
     const toggleMute = () => {
         const iframe = iframeRef.current;
         if (iframe) {
-            const cmd = muted ? "unMute" : "mute";
             iframe.contentWindow.postMessage(
-                JSON.stringify({ event: "command", func: cmd, args: [] }),
+                JSON.stringify({ method: "setMuted", value: !muted }),
                 "*"
             );
         }
@@ -852,9 +851,10 @@ const HeroBlock = () => {
                 >
                     <iframe
                         ref={iframeRef}
-                        src="https://www.youtube.com/embed/SR__amDl1c8?autoplay=1&mute=1&loop=1&playlist=SR__amDl1c8&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
-                        title="Reel Finem × Mike4Visual"
-                        allow="autoplay; encrypted-media"
+                        src="https://player.vimeo.com/video/1143692702?autoplay=1&loop=1&muted=1&controls=0&autopause=0&badge=0&playsinline=1&background=1"
+                        title="Ix Maa Uayec - Produccion y Direccion"
+                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
                         allowFullScreen
                         style={{ width: "100%", height: "100%", border: "none" }}
                     />
@@ -1472,10 +1472,11 @@ const ReelBlock = () => {
                         <iframe
                             width="100%"
                             height="100%"
-                            src={"https://www.youtube.com/embed/gQldOO6KiU8?rel=0&modestbranding=1" + (playing ? "&autoplay=1" : "")}
-                            title="Showreel"
+                            src={"https://player.vimeo.com/video/1162665807?badge=0&autopause=0" + (playing ? "&autoplay=1" : "")}
+                            title="Demo Reel MIke4V"
                             frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
                             allowFullScreen
                             style={{ position: "absolute", inset: 0, borderRadius: 16, zIndex: 1 }}
                         />
