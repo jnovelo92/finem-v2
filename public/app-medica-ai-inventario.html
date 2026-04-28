@@ -98,6 +98,74 @@
   --shadow-md:    0 2px 8px rgba(0,0,0,0.35);
   --shadow-lg:    0 8px 24px rgba(0,0,0,0.45);
   --shadow-focus: 0 0 0 3px rgba(30, 136, 229, 0.25);
+
+  /* ─── Tinted surfaces (resuelven entre temas) ───────────────── */
+  --topbar-bg:        rgba(10, 14, 20, 0.85);    /* topbar blurred */
+  --modal-overlay:    rgba(0, 0, 0, 0.6);
+  --row-zebra:        rgba(255, 255, 255, 0.012); /* fila alterna */
+  --avatar-fg:        #0A0E14;
+}
+
+/* ════════════════════════════════════════════════════════════
+   LIGHT THEME — clinical, alta legibilidad, ABNT-friendly
+   Activado vía  <html data-theme="light">
+   ════════════════════════════════════════════════════════════ */
+[data-theme="light"] {
+  /* ─── Surfaces ───────────────────────────────────────── */
+  --bg-base:     #F1F3F6;   /* sidebar, capa más profunda */
+  --bg-page:     #F7F8FA;   /* background general */
+  --bg-card:     #FFFFFF;   /* tarjetas, contenido */
+  --bg-card-2:   #F4F6F9;   /* hover, secundario */
+  --bg-elev:     #FFFFFF;   /* menus, dropdowns elevados */
+  --bg-input:    #FFFFFF;   /* inputs */
+
+  /* ─── Borders ────────────────────────────────────────── */
+  --border-subtle:  #ECEFF3;
+  --border-default: #DDE2E8;
+  --border-strong:  #C2CAD3;
+
+  /* ─── Text ──────────────────────────────────────────── */
+  --text-primary:   #0F1923;
+  --text-secondary: #4A5667;
+  --text-tertiary:  #76828F;
+  --text-disabled:  #B5BCC4;
+
+  /* ─── Brand · Azul clínico (más saturado en claro) ───── */
+  --brand-50:  #E8F2FE;
+  --brand-100: #C6DEF9;
+  --brand-200: #95C0F2;
+  --brand-300: #5298E5;
+  --brand-400: #2E83DC;
+  --brand-500: #1976D2;
+  --brand-600: #0D6BC4;   /* primario de marca */
+  --brand-700: #094F94;
+
+  /* ─── Semánticos clínicos (fondos más claros) ─────────── */
+  --clinical-positive:    #00875A;
+  --clinical-positive-bg: #E3F4EC;
+  --clinical-warning:     #B5750F;
+  --clinical-warning-bg:  #FCF1DC;
+  --clinical-critical:    #C7361F;
+  --clinical-critical-bg: #FCE8E5;
+  --clinical-info:        var(--brand-600);
+  --clinical-info-bg:     #E8F2FE;
+
+  /* ─── Acento IA ─────────────────────────────────────── */
+  --ai-accent:        #0F8B83;
+  --ai-accent-soft:   rgba(15, 139, 131, 0.10);
+  --ai-accent-line:   rgba(15, 139, 131, 0.28);
+
+  /* ─── Sombras (más visibles en light) ─────────────────── */
+  --shadow-sm:    0 1px 0 rgba(15, 25, 35, 0.04);
+  --shadow-md:    0 2px 8px rgba(15, 25, 35, 0.06);
+  --shadow-lg:    0 8px 24px rgba(15, 25, 35, 0.10);
+  --shadow-focus: 0 0 0 3px rgba(13, 107, 196, 0.18);
+
+  /* ─── Tinted surfaces ───────────────────────────────── */
+  --topbar-bg:        rgba(247, 248, 250, 0.85);
+  --modal-overlay:    rgba(15, 25, 35, 0.40);
+  --row-zebra:        rgba(15, 25, 35, 0.018);
+  --avatar-fg:        #FFFFFF;
 }
 
 /* ============================================================
@@ -193,19 +261,89 @@ input, button, textarea, select { font-family: inherit; color: inherit; }
 button { cursor: pointer; }
 
 ::selection { background: rgba(110,168,254,.3); color: var(--text-primary); }
+
+/* Theme transition — soft when toggling */
+html { transition: background-color 200ms ease; }
+html *, html *::before, html *::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 160ms;
+  transition-timing-function: ease;
+}
+
 :focus-visible { outline: 2px solid var(--brand-500); outline-offset: 2px; border-radius: 4px; }
+.row { display: flex; align-items: center; }
 
 @keyframes aiPulse {
   0%   { transform: scale(1);   opacity: 0.6; }
   100% { transform: scale(2.6); opacity: 0;   }
 }
 
-.row { display: flex; align-items: center; }
+/* Tour animations */
+@keyframes tour-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 1.5px var(--ai-accent), 0 0 0 6px rgba(102,217,210,.18), 0 0 24px 6px rgba(102,217,210,.32);
+  }
+  50% {
+    box-shadow: 0 0 0 1.5px var(--ai-accent), 0 0 0 10px rgba(102,217,210,.10), 0 0 36px 10px rgba(102,217,210,.42);
+  }
+}
+@keyframes tour-card-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes tour-card-in-center {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Tour buttons — explicit hover/active so icons never lose contrast */
+.tour-btn-ghost:hover:not(:disabled) {
+  background: var(--bg-card-2) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-strong) !important;
+}
+.tour-btn-ghost:active:not(:disabled) {
+  background: var(--bg-base) !important;
+  color: var(--text-primary) !important;
+}
+.tour-btn-ghost:focus-visible {
+  outline: 2px solid var(--ai-accent);
+  outline-offset: 2px;
+}
+.tour-btn-primary:hover {
+  background: #7fe0d9 !important;
+  color: #03161A !important;
+}
+.tour-btn-primary:active {
+  background: #5cc9c2 !important;
+  color: #03161A !important;
+}
+.tour-btn-primary svg { stroke: #03161A !important; }
 </style>
 </head>
 <body>
 
 <div id="root"></div>
+
+<!-- Theme bootstrap (sets data-theme before React mounts to avoid flash) -->
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('appmedica_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+  window.__getTheme = function () {
+    return document.documentElement.getAttribute('data-theme') || 'dark';
+  };
+  window.__setTheme = function (t) {
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem('appmedica_theme', t); } catch (e) {}
+    window.dispatchEvent(new CustomEvent('themechange', { detail: t }));
+  };
+</script>
 
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
@@ -244,7 +382,9 @@ const Icon = ({ name, size = 16, ...rest }) => {
     case "alert": return <svg {...props}><path d="M12 8v5M12 17h.01"/><path d="M10.3 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.41 0z"/></svg>;
     case "info": return <svg {...props}><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>;
     case "chevron-right": return <svg {...props}><path d="m9 6 6 6-6 6"/></svg>;
+    case "chevron-left": return <svg {...props}><path d="m15 6-6 6 6 6"/></svg>;
     case "chevron-down": return <svg {...props}><path d="m6 9 6 6 6-6"/></svg>;
+    case "chevron-up": return <svg {...props}><path d="m6 15 6-6 6 6"/></svg>;
     case "plus": return <svg {...props}><path d="M12 5v14M5 12h14"/></svg>;
     case "mic": return <svg {...props}><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>;
     case "trend-up": return <svg {...props}><path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>;
@@ -327,6 +467,11 @@ const Button = ({ variant = "primary", size = "md", icon, iconRight, children, o
       color: "var(--ai-accent)",
       border: "1px solid var(--ai-accent-line)",
     },
+    warning: {
+      background: "var(--clinical-warning)",
+      color: "#1A0E00",
+      border: "1px solid var(--clinical-warning)",
+    },
   };
   return (
     <button
@@ -354,12 +499,14 @@ const Button = ({ variant = "primary", size = "md", icon, iconRight, children, o
         if (variant === "secondary") e.currentTarget.style.borderColor = "var(--border-strong)";
         if (variant === "ghost") e.currentTarget.style.background = "var(--bg-card-2)";
         if (variant === "ai") e.currentTarget.style.background = "var(--ai-accent-soft)";
+        if (variant === "warning") e.currentTarget.style.filter = "brightness(0.96)";
       }}
       onMouseLeave={(e) => {
         if (variant === "primary") e.currentTarget.style.background = "var(--brand-600)";
         if (variant === "secondary") e.currentTarget.style.borderColor = "var(--border-default)";
         if (variant === "ghost") e.currentTarget.style.background = "transparent";
         if (variant === "ai") e.currentTarget.style.background = "transparent";
+        if (variant === "warning") e.currentTarget.style.filter = "none";
       }}
     >
       {icon && <Icon name={icon} size={size === "lg" ? 16 : 14} />}
@@ -906,6 +1053,24 @@ const BrandGlyph = ({ size = 24 }) => (
   </span>
 );
 
+/* ───────────────────── HORIZONTAL-SCROLL TABLE ─────────────────
+   Wraps a custom CSS-grid table so it can scroll horizontally on
+   narrow viewports without collapsing columns. Children render inside
+   an inner block with `min-width: minWidth`.
+   Usage:
+     <ScrollGrid minWidth={1020}>
+       <div style={{display:"grid", gridTemplateColumns:"…", gap:12, padding:"…"}}>…header…</div>
+       <Row/>
+     </ScrollGrid>
+*/
+const ScrollGrid = ({ minWidth, children, style }) => (
+  <div style={{ overflowX: "auto", overflowY: "hidden", ...style }}>
+    <div style={{ minWidth }}>
+      {children}
+    </div>
+  </div>
+);
+
 /* ─────────────────────────── EXPORT ────────────────────────── */
 
 Object.assign(window, {
@@ -916,6 +1081,7 @@ Object.assign(window, {
   Alert, KPI, Table,
   SidebarItem, SidebarSection,
   Wordmark, BrandGlyph,
+  ScrollGrid,
 });
 
 })();
@@ -1233,6 +1399,7 @@ const _ExtraIcons = ({ name, size = 16, ...rest }) => {
     case "image": return <svg {...props}><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m3 17 5-5 4 4 4-4 5 5"/></svg>;
     case "bookmark": return <svg {...props}><path d="M5 4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v17l-7-4-7 4z"/></svg>;
     case "git-branch": return <svg {...props}><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 7v10M18 11c0 4-6 4-6 8"/></svg>;
+    case "pause": return <svg {...props}><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>;
     default: return _IconOriginal({ name, size, ...rest });
   }
 };
@@ -1585,93 +1752,119 @@ const NAV = [
   ]},
 ];
 
-const SidebarNav = ({ active, onNav }) => (
-  <aside style={{
-    width: 232, flexShrink: 0,
+const SidebarNav = ({ active, onNav, collapsed, onToggleCollapsed }) => (
+  <aside data-tour="sidebar" style={{
+    width: collapsed ? 56 : 232, flexShrink: 0,
     background: "var(--bg-base)",
     borderRight: "1px solid var(--border-subtle)",
     display: "flex", flexDirection: "column",
     height: "100vh", position: "sticky", top: 0,
+    transition: "width 180ms ease",
   }}>
     {/* Logo + product */}
-    <div style={{ height: 56, padding: "0 16px", display: "flex", alignItems: "center", borderBottom: "1px solid var(--border-subtle)" }}>
-      <Wordmark size={15} />
+    <div style={{ height: 56, padding: collapsed ? "0" : "0 16px", display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "flex-start", borderBottom: "1px solid var(--border-subtle)" }}>
+      {collapsed
+        ? <div style={{ width: 28, height: 28, borderRadius: 6, background: "var(--brand-600)", color: "#fff", display: "grid", placeItems: "center", fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 600 }}>m</div>
+        : <Wordmark size={15} />}
     </div>
 
     {/* Almacén selector */}
-    <div style={{ padding: "12px 12px 0 12px" }}>
-      <button style={{
-        display: "flex", alignItems: "center", gap: 8, width: "100%",
-        padding: "8px 10px",
-        background: "var(--bg-card)",
-        border: "1px solid var(--border-subtle)",
-        borderRadius: "var(--r-md)",
-        color: "var(--text-primary)",
-        fontFamily: "var(--font-sans)", fontSize: 12, textAlign: "left",
-      }}>
-        <Icon name="warehouse" size={14} style={{ color: "var(--text-tertiary)" }}/>
-        <div style={{ flex: 1, minWidth: 0, overflow: "hidden" }}>
-          <div style={{ fontSize: 12, fontWeight: 500, whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}>Almacén Central</div>
-          <div style={{ fontSize: 10, color: "var(--text-tertiary)", fontFamily: "var(--font-mono)" }}>Hosp. San Carlos · Cancún</div>
-        </div>
-        <Icon name="chevron-down" size={12} style={{ color: "var(--text-tertiary)" }}/>
-      </button>
-    </div>
+    {!collapsed && (
+      <div style={{ padding: "12px 12px 0 12px" }}>
+        <button style={{
+          display: "flex", alignItems: "center", gap: 8, width: "100%",
+          padding: "8px 10px",
+          background: "var(--bg-card)",
+          border: "1px solid var(--border-subtle)",
+          borderRadius: "var(--r-md)",
+          color: "var(--text-primary)",
+          fontFamily: "var(--font-sans)", fontSize: 12, textAlign: "left",
+        }}>
+          <Icon name="warehouse" size={14} style={{ color: "var(--text-tertiary)" }}/>
+          <div style={{ flex: 1, minWidth: 0, overflow: "hidden" }}>
+            <div style={{ fontSize: 12, fontWeight: 500, whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}>Almacén Central</div>
+            <div style={{ fontSize: 10, color: "var(--text-tertiary)", fontFamily: "var(--font-mono)" }}>Hosp. San Carlos · Cancún</div>
+          </div>
+          <Icon name="chevron-down" size={12} style={{ color: "var(--text-tertiary)" }}/>
+        </button>
+      </div>
+    )}
 
     {/* Nuevo + */}
-    <div style={{ padding: "10px 12px" }}>
-      <button style={{
+    <div style={{ padding: collapsed ? "12px 10px 6px 10px" : "10px 12px" }}>
+      <button title={collapsed ? "Nuevo" : undefined} style={{
         display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
         width: "100%", height: 32,
         background: "var(--brand-600)", color: "#fff",
         border: "none", borderRadius: "var(--r-md)",
         fontSize: 12.5, fontWeight: 500,
       }}>
-        <Icon name="plus" size={14}/> Nuevo
-        <span style={{ marginLeft: "auto", display: "flex", gap: 2 }}>
-          <KbdHint>N</KbdHint>
-        </span>
+        <Icon name="plus" size={14}/>
+        {!collapsed && <>Nuevo
+          <span style={{ marginLeft: "auto", display: "flex", gap: 2 }}>
+            <KbdHint>N</KbdHint>
+          </span>
+        </>}
       </button>
     </div>
 
     {/* Nav */}
-    <nav style={{ flex: 1, overflow: "auto", padding: "4px 16px 16px 16px" }}>
+    <nav style={{ flex: 1, overflow: "auto", padding: collapsed ? "4px 8px 16px 8px" : "4px 16px 16px 16px" }}>
       {NAV.map((sec, i) => (
         <div key={i} style={{ marginBottom: 14 }}>
-          <div style={{
-            fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 500,
-            color: "var(--text-tertiary)", textTransform: "uppercase",
-            letterSpacing: "0.1em", padding: "0 10px", marginBottom: 4,
-          }}>{sec.section}</div>
+          {!collapsed && (
+            <div style={{
+              fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 500,
+              color: "var(--text-tertiary)", textTransform: "uppercase",
+              letterSpacing: "0.1em", padding: "0 10px", marginBottom: 4,
+            }}>{sec.section}</div>
+          )}
+          {collapsed && i > 0 && <div style={{ height: 1, background: "var(--border-subtle)", margin: "0 6px 6px 6px" }}/>}
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
             {sec.items.map(it => (
-              <NavItem key={it.id} item={it} active={active === it.id} onClick={() => onNav(it.id)} />
+              <NavItem key={it.id} item={it} active={active === it.id} onClick={() => onNav(it.id)} collapsed={collapsed} />
             ))}
           </div>
         </div>
       ))}
     </nav>
 
+    {/* Collapse toggle */}
+    <button onClick={onToggleCollapsed} title={collapsed ? "Expandir menú" : "Colapsar menú"} style={{
+      display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+      height: 32, margin: collapsed ? "0 8px 8px 8px" : "0 12px 8px 12px",
+      background: "transparent", border: "1px solid var(--border-subtle)",
+      borderRadius: "var(--r-md)", color: "var(--text-tertiary)",
+      fontFamily: "var(--font-sans)", fontSize: 11.5,
+    }}>
+      <Icon name={collapsed ? "chevron-right" : "chevron-left"} size={12}/>
+      {!collapsed && <span>Colapsar</span>}
+    </button>
+
     {/* User footer */}
-    <div style={{ padding: "10px 12px", borderTop: "1px solid var(--border-subtle)", display: "flex", alignItems: "center", gap: 10 }}>
+    <div style={{ padding: collapsed ? "10px 8px" : "10px 12px", borderTop: "1px solid var(--border-subtle)", display: "flex", alignItems: "center", gap: 10, justifyContent: collapsed ? "center" : "flex-start" }}>
       <Avatar name="María Reyes" size={28} variant="brand" />
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 12, fontWeight: 500, color: "var(--text-primary)" }}>Dra. María R.</div>
-        <div style={{ fontSize: 10, color: "var(--text-tertiary)", fontFamily: "var(--font-mono)" }}>Jefa de Farmacia</div>
-      </div>
-      <Icon name="more-vertical" size={14} style={{ color: "var(--text-tertiary)" }}/>
+      {!collapsed && <>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 12, fontWeight: 500, color: "var(--text-primary)" }}>Dra. María R.</div>
+          <div style={{ fontSize: 10, color: "var(--text-tertiary)", fontFamily: "var(--font-mono)" }}>Jefa de Farmacia</div>
+        </div>
+        <Icon name="more-vertical" size={14} style={{ color: "var(--text-tertiary)" }}/>
+      </>}
     </div>
   </aside>
 );
 
-const NavItem = ({ item, active, onClick }) => {
+const NavItem = ({ item, active, onClick, collapsed }) => {
   const [hover, setHover] = useStateShell(false);
   return (
     <button onClick={onClick}
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+      title={collapsed ? item.label : undefined}
       style={{
         display: "flex", alignItems: "center", gap: 9,
-        width: "100%", height: 30, padding: "0 10px",
+        width: "100%", height: 30, padding: collapsed ? "0" : "0 10px",
+        justifyContent: collapsed ? "center" : "flex-start",
         background: active ? "var(--bg-card-2)" : (hover ? "var(--bg-card)" : "transparent"),
         color: active ? "var(--text-primary)" : (hover ? "var(--text-primary)" : "var(--text-secondary)"),
         border: "none", borderRadius: "var(--r-md)",
@@ -1681,8 +1874,10 @@ const NavItem = ({ item, active, onClick }) => {
         position: "relative",
         transition: "all 100ms ease",
       }}>
-      {active && <span style={{ position: "absolute", left: -16, top: 6, bottom: 6, width: 2, background: "var(--brand-500)", borderRadius: 2 }}/>}
+      {active && !collapsed && <span style={{ position: "absolute", left: -16, top: 6, bottom: 6, width: 2, background: "var(--brand-500)", borderRadius: 2 }}/>}
+      {active && collapsed && <span style={{ position: "absolute", left: -8, top: 6, bottom: 6, width: 2, background: "var(--brand-500)", borderRadius: 2 }}/>}
       <Icon name={item.icon} size={14} style={item.aiAccent ? { color: "var(--ai-accent)" } : {}}/>
+      {!collapsed && (<>
       <span style={{ flex: 1 }}>{item.label}</span>
       {item.dot && <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--clinical-critical)" }}/>}
       {item.badge && <span style={{
@@ -1693,6 +1888,7 @@ const NavItem = ({ item, active, onClick }) => {
       {item.count && !item.badge && (
         <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-tertiary)" }}>{item.count}</span>
       )}
+      </>)}
     </button>
   );
 };
@@ -1700,13 +1896,13 @@ const NavItem = ({ item, active, onClick }) => {
 const Topbar = ({ breadcrumb, actions, onCmdK }) => (
   <header style={{
     height: 56, position: "sticky", top: 0, zIndex: 10,
-    background: "rgba(10, 14, 20, 0.85)",
+    background: "var(--topbar-bg)",
     backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
     borderBottom: "1px solid var(--border-subtle)",
     display: "flex", alignItems: "center",
     padding: "0 24px", gap: 16,
   }}>
-    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--text-secondary)", flexShrink: 0 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--text-secondary)", flexShrink: 1, minWidth: 0, overflow: "hidden", whiteSpace: "nowrap" }}>
       {breadcrumb.map((b, i) => (
         <React.Fragment key={i}>
           {i > 0 && <Icon name="chevron-right" size={12} style={{ color: "var(--text-tertiary)" }}/>}
@@ -1719,8 +1915,8 @@ const Topbar = ({ breadcrumb, actions, onCmdK }) => (
     </div>
 
     {/* Search ⌘K */}
-    <button onClick={onCmdK} style={{
-      flex: 1, maxWidth: 480,
+    <button onClick={onCmdK} data-tour="search" style={{
+      flex: 1, maxWidth: 480, minWidth: 120,
       display: "flex", alignItems: "center", gap: 10,
       height: 32, padding: "0 12px",
       background: "var(--bg-card)",
@@ -1729,9 +1925,10 @@ const Topbar = ({ breadcrumb, actions, onCmdK }) => (
       color: "var(--text-tertiary)",
       fontFamily: "var(--font-sans)", fontSize: 12.5,
       textAlign: "left", marginLeft: 24,
+      overflow: "hidden", whiteSpace: "nowrap",
     }}>
       <Icon name="search" size={13} />
-      <span style={{ flex: 1 }}>Buscar producto, lote, OC, paciente…</span>
+      <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>Buscar producto, lote, OC, paciente…</span>
       <KbdHint>⌘</KbdHint><KbdHint>K</KbdHint>
     </button>
 
@@ -1774,7 +1971,7 @@ const CommandPalette = ({ open, onClose, onNav }) => {
   return (
     <div onClick={onClose} style={{
       position: "fixed", inset: 0, zIndex: 100,
-      background: "rgba(0,0,0,0.6)",
+      background: "var(--modal-overlay)",
       backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)",
       display: "flex", alignItems: "flex-start", justifyContent: "center",
       paddingTop: "12vh",
@@ -2003,7 +2200,7 @@ const Dashboard = ({ onNav }) => {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12, marginBottom: 24 }}>
+      <div data-tour="dash-kpis" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12, marginBottom: 24 }}>
         <KPICard label="Capital atrapado" value="$3.84" unit="M MXN" delta="↑ 4.2% vs mes ant." trend="warning"
           sparkline={[3.5,3.55,3.6,3.62,3.7,3.74,3.8,3.84]} sparkVariant="warning"/>
         <KPICard label="Próximos a vencer 30d" value="47" unit="lotes · $182,400" delta="14 críticos · 33 advertencia" trend="warning"
@@ -2084,7 +2281,7 @@ const Dashboard = ({ onNav }) => {
         </div>
 
         {/* Consumo */}
-        <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", padding: 18 }}>
+        <div data-tour="dash-consumo" style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", padding: 18 }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 8 }}>
             <div>
               <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>Consumo y predicción</div>
@@ -2334,7 +2531,7 @@ const Existencias = ({ onProducto }) => {
         </aside>
 
         {/* Tabla */}
-        <div style={{
+        <div data-tour="existencias-grid" style={{
           background: "var(--bg-card)", border: "1px solid var(--border-subtle)",
           borderRadius: "var(--r-lg)", overflow: "hidden",
         }}>
@@ -2346,6 +2543,7 @@ const Existencias = ({ onProducto }) => {
             <Button variant="secondary" size="sm" icon="download">Exportar</Button>
           </div>
           {/* Header */}
+          <ScrollGrid minWidth={1040}>
           <div style={{
             display: "grid",
             gridTemplateColumns: "32px minmax(220px,2.5fr) 130px 90px 60px 70px 90px 110px 80px 32px",
@@ -2370,6 +2568,7 @@ const Existencias = ({ onProducto }) => {
           {productos.map((p, i) => (
             <ProductoRow key={p.id} p={p} i={i} onClick={() => onProducto(p.id)}/>
           ))}
+          </ScrollGrid>
           {/* Footer */}
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -2518,7 +2717,7 @@ const DetalleProducto = ({ id, onBack }) => {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--border-subtle)", marginBottom: 20 }}>
+      <div data-tour="producto-tabs" style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--border-subtle)", marginBottom: 20 }}>
         {[
           { id: "resumen", label: "Resumen" },
           { id: "lotes", label: "Lotes", count: lotes.length },
@@ -2848,7 +3047,7 @@ const Lotes = () => {
       </div>
 
       {/* Bandas */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <div data-tour="lotes-bandas" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         {bandas.map(b => {
           const lotes = LOTES.filter(b.filter);
           const valor = lotes.reduce((s, l) => {
@@ -2936,7 +3135,7 @@ const Recepciones = () => {
       <PageHeader title="Recepciones" subtitle="Verificación de mercancía contra orden de compra"
         actions={<Button variant="primary" icon="plus">Nueva recepción</Button>}/>
 
-      <div style={{ display: "grid", gridTemplateColumns: "340px 1fr", gap: 16, alignItems: "flex-start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "340px minmax(0,1fr)", gap: 16, alignItems: "flex-start" }}>
         {/* List */}
         <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden" }}>
           <div style={{ padding: "10px 14px", borderBottom: "1px solid var(--border-subtle)", display: "flex", gap: 6 }}>
@@ -2978,20 +3177,20 @@ const Recepciones = () => {
         {/* Detail */}
         <div>
           <Card style={{ marginBottom: 16 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-              <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14, gap: 12, flexWrap: "wrap" }}>
+              <div style={{ minWidth: 0, flex: "1 1 auto" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
                   <h2 style={{ margin: 0, fontSize: 18, fontWeight: 600, letterSpacing: "-0.01em" }}>{r.id}</h2>
                   <Badge variant={r.estado === "Completada" ? "positive" : r.estado === "Con diferencias" ? "warning" : r.estado === "Atrasada" ? "critical" : "brand"}>{r.estado}</Badge>
                 </div>
                 <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>{r.proveedor} · OC {r.oc}</div>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 <Button variant="secondary" size="sm">Reportar al proveedor</Button>
                 {r.estado !== "Completada" && <Button variant="primary" size="sm" icon="check">Validar y cerrar</Button>}
               </div>
             </div>
-            <div style={{ display: "flex", gap: 24, paddingTop: 14, borderTop: "1px solid var(--border-subtle)" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 24, paddingTop: 14, borderTop: "1px solid var(--border-subtle)" }}>
               <Meta label="Esperada" value={r.esperada} mono/>
               <Meta label="Recibida" value={r.fecha} mono/>
               <Meta label="Operador" value={r.operador}/>
@@ -3005,6 +3204,7 @@ const Recepciones = () => {
               <span style={{ fontSize: 13, fontWeight: 600 }}>Líneas de recepción</span>
               <span style={{ fontSize: 11, color: "var(--text-tertiary)", fontFamily: "var(--font-mono)" }}>2 con diferencias</span>
             </div>
+            <ScrollGrid minWidth={920}>
             <div style={{
               display: "grid", gridTemplateColumns: "minmax(200px,2fr) 80px 80px 80px 130px 110px 100px",
               gap: 12, padding: "8px 16px", background: "var(--bg-base)",
@@ -3042,6 +3242,7 @@ const Recepciones = () => {
                 </div>
               );
             })}
+            </ScrollGrid>
           </div>
 
           {r.incidencias && r.incidencias.length > 0 && (
@@ -3077,6 +3278,7 @@ const OrdenesCompra = () => (
       actions={<Button variant="primary" icon="plus">Nueva OC</Button>}/>
 
     {/* Sugerencias IA */}
+    <div data-tour="oc-sugerencias">
     <AISurface title="47 SKUs sugeridos para reorden esta semana" kbd="ML"
       action={<Button variant="ai" size="sm">Crear OC con todos</Button>}>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
@@ -3101,10 +3303,12 @@ const OrdenesCompra = () => (
         ))}
       </div>
     </AISurface>
+    </div>
 
     <div style={{ height: 16 }}/>
 
-    <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden" }}>
+    <div data-tour="oc-tabla" style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden" }}>
+      <ScrollGrid minWidth={900}>
       <div style={{
         display: "grid", gridTemplateColumns: "120px 1fr 110px 110px 120px 110px 80px 32px",
         gap: 12, padding: "10px 16px", background: "var(--bg-base)",
@@ -3133,6 +3337,7 @@ const OrdenesCompra = () => (
           <Icon name="more-vertical" size={14} style={{ color: "var(--text-tertiary)" }}/>
         </div>
       ))}
+      </ScrollGrid>
     </div>
   </div>
 );
@@ -3281,7 +3486,8 @@ const Alertas = () => {
         </aside>
 
         {/* Lista */}
-        <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden" }}>
+        <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden", minWidth: 0 }}>
+          <ScrollGrid minWidth={1080}>
           <div style={{
             display: "grid", gridTemplateColumns: "32px 24px 130px minmax(280px,1fr) 200px 110px 100px 32px",
             gap: 12, padding: "10px 16px", background: "var(--bg-base)",
@@ -3349,6 +3555,7 @@ const Alertas = () => {
               </div>
             );
           })}
+          </ScrollGrid>
         </div>
       </div>
     </div>
@@ -3361,7 +3568,7 @@ const Controlados = () => (
   <div>
     {/* Distintive header banda */}
     <div style={{
-      background: "linear-gradient(180deg, rgba(15,42,71,0.4), transparent)",
+      background: "linear-gradient(180deg, var(--clinical-warning-bg), transparent)",
       borderBottom: "1px solid var(--border-subtle)",
       margin: "-32px -56px 24px",
       padding: "32px 56px 24px",
@@ -3432,6 +3639,7 @@ const Controlados = () => (
 
     {/* Libro */}
     <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-default)", borderRadius: "var(--r-lg)", overflow: "hidden" }}>
+      <ScrollGrid minWidth={1180}>
       <div style={{
         display: "grid", gridTemplateColumns: "130px 110px 80px 80px 80px 110px 100px 1fr 1fr 110px",
         gap: 12, padding: "10px 16px", background: "var(--bg-base)",
@@ -3456,7 +3664,7 @@ const Controlados = () => (
           gap: 12, padding: "11px 16px", alignItems: "center",
           borderBottom: i < LIBRO_CONTROLADOS.length-1 ? "1px solid var(--border-subtle)" : "none",
           fontSize: 11.5, fontFamily: "var(--font-mono)",
-          background: i % 2 === 0 ? "transparent" : "rgba(255,255,255,0.012)",
+          background: i % 2 === 0 ? "transparent" : "var(--row-zebra)",
         }}>
           <span style={{ color: "var(--text-secondary)" }}>{m.fecha}</span>
           <span style={{ color: "var(--text-primary)" }}>{m.tipo}</span>
@@ -3470,6 +3678,7 @@ const Controlados = () => (
           <Badge variant="positive">Asentado</Badge>
         </div>
       ))}
+      </ScrollGrid>
       <div style={{
         padding: "12px 16px", background: "var(--bg-base)", borderTop: "1px solid var(--border-default)",
         display: "flex", justifyContent: "space-between", fontSize: 12, fontFamily: "var(--font-mono)",
@@ -3549,7 +3758,7 @@ const Reportes = () => {
       <PageHeader title="Reportes" subtitle="Generación bajo demanda · firmados digitalmente cuando aplica"
         actions={<Button variant="secondary" icon="settings">Plantillas custom</Button>}/>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+      <div data-tour="reportes-grid" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
         {cats.map(cat => (
           <div key={cat.label}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 12 }}>
@@ -3632,7 +3841,8 @@ const Movimientos = () => {
         <KPICard label="Ajustes / mermas" value="6" delta="0 sin justificar" trend="positive" sparkline={[8,7,6,6,5,6,6]} sparkVariant="warning"/>
       </div>
 
-      <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden" }}>
+      <div data-tour="mov-tabla" style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden" }}>
+        <ScrollGrid minWidth={1100}>
         <div style={{
           display: "grid", gridTemplateColumns: "150px 90px minmax(220px,2fr) 130px minmax(180px,1fr) 80px 130px 100px",
           gap: 12, padding: "10px 16px", background: "var(--bg-base)",
@@ -3666,6 +3876,7 @@ const Movimientos = () => {
             <span style={{ color: "var(--brand-300)", fontSize: 11 }}>{m.ref}</span>
           </div>
         ))}
+        </ScrollGrid>
       </div>
     </div>
   );
@@ -3681,7 +3892,8 @@ const Productos = () => (
         <Button variant="primary" icon="plus">Nuevo producto</Button>
       </>}/>
 
-    <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden" }}>
+    <div data-tour="productos-tabla" style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden" }}>
+      <ScrollGrid minWidth={950}>
       <div style={{
         display: "grid", gridTemplateColumns: "minmax(240px,2fr) 130px 90px 70px 70px 110px 120px 80px",
         gap: 12, padding: "10px 16px", background: "var(--bg-base)",
@@ -3717,6 +3929,7 @@ const Productos = () => (
           <span style={{ fontFamily: "var(--font-mono)", textAlign: "right", color: "var(--text-secondary)", fontSize: 11.5 }}>{fmtMXNd(p.valor / Math.max(1, p.stock))}</span>
         </div>
       ))}
+      </ScrollGrid>
     </div>
   </div>
 );
@@ -3775,7 +3988,7 @@ const Ubicaciones = () => {
         actions={<Button variant="primary" icon="plus">Nueva ubicación</Button>}/>
 
       <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 16 }}>
-        <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden", alignSelf: "flex-start" }}>
+        <div data-tour="ubic-arbol" style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--r-lg)", overflow: "hidden", alignSelf: "flex-start" }}>
           <div style={{ padding: "10px 14px", borderBottom: "1px solid var(--border-subtle)", fontSize: 12, fontWeight: 600 }}>Jerarquía</div>
           <div style={{ padding: "8px 0" }}>
             {tree.map(n => <TreeNode key={n.id} node={n}/>)}
@@ -4069,7 +4282,7 @@ const Login = ({ onLogin }) => {
       {/* Left brand pane */}
       <div style={{
         flex: 1, position: "relative", overflow: "hidden",
-        background: "var(--bg-deep)",
+        background: "var(--bg-base)",
         borderRight: "1px solid var(--border-subtle)",
         padding: 56,
         display: "flex", flexDirection: "column", justifyContent: "space-between",
@@ -4174,6 +4387,621 @@ Object.assign(window, { Reportes, Movimientos, Productos, Ubicaciones, InsightsI
 </script>
 <script type="text/babel">
 ;(function(){
+// Tour cinematográfico — spotlight + glow IA + narración por capítulos.
+// Activado desde el botón "Tour guiado" del topbar.
+
+const { useState: useStateTour, useEffect: useEffectTour, useRef: useRefTour, useLayoutEffect: useLayoutEffectTour } = React;
+
+/* ─────────────────── STEPS ─────────────────── */
+// chapter: 1 = Operación · 2 = Control regulatorio · 3 = Inteligencia
+// side: 'right' | 'left' | 'top' | 'bottom' (preferred) — auto-flips si no cabe
+// route → ruta de la app que debe estar activa
+// target → selector CSS (data-tour="...") o 'fullscreen' para no destacar nada
+// padding → margen alrededor del cutout
+// scroll → 'into-view' para hacer scroll al elemento
+
+const TOUR_STEPS = [
+  // ─── Intro ───
+  {
+    id: "intro",
+    chapter: 0,
+    route: "dashboard",
+    target: "fullscreen",
+    eyebrow: "App Médica·AI",
+    title: "Inventario inteligente para farmacias hospitalarias",
+    body: "Un módulo construido para resolver tres problemas que hoy cuestan millones a los hospitales de México: capital atrapado en stock, mermas por caducidad y riesgo regulatorio en controlados. Cada pantalla está pensada para que la jefa de farmacia tome decisiones en segundos, no en horas.",
+    metric: { value: "13", label: "minutos de recorrido · 16 paradas" },
+    side: "center",
+  },
+
+  // ════════════════ CAPÍTULO 1 · OPERACIÓN ════════════════
+  {
+    id: "shell",
+    chapter: 1,
+    route: "dashboard",
+    target: '[data-tour="sidebar"]',
+    padding: 8,
+    eyebrow: "Capítulo 1 · Operación",
+    title: "Una sola consola para 5 flujos críticos",
+    body: "Operación, flujos transaccionales, control regulatorio, catálogos e inteligencia. Atajos de teclado en cada acción, almacén multi-sede en el header. Diseñado para teclado, no para mouse.",
+    metric: { value: "G + tecla", label: "navegación instantánea entre módulos" },
+    side: "right",
+  },
+  {
+    id: "kpis",
+    chapter: 1,
+    route: "dashboard",
+    target: '[data-tour="dash-kpis"]',
+    padding: 12,
+    eyebrow: "Dashboard · KPIs operativos",
+    title: "Cinco números que importan, en una pantalla",
+    body: "Capital atrapado, lotes próximos a vencer, exactitud de inventario, mermas y pendientes. Cada KPI lleva sparkline de tendencia y comparativo contra meta. Verde, ámbar, rojo — semántica clínica.",
+    metric: { value: "$3.84M", label: "capital atrapado · 4.2% sobre el mes anterior" },
+    side: "bottom",
+  },
+  {
+    id: "consumo",
+    chapter: 1,
+    route: "dashboard",
+    target: '[data-tour="dash-consumo"]',
+    padding: 12,
+    eyebrow: "Predicción de consumo",
+    title: "30 días reales + 5 días proyectados con IA",
+    body: "El modelo aprende patrones por SKU, día de la semana, estacionalidad clínica y eventos del hospital. La predicción alimenta directamente las sugerencias de orden de compra y la priorización de mermas.",
+    metric: { value: "5 días", label: "horizonte de predicción visible al primer vistazo" },
+    side: "left",
+  },
+  {
+    id: "existencias",
+    chapter: 1,
+    route: "existencias",
+    target: '[data-tour="existencias-grid"]',
+    padding: 12,
+    eyebrow: "Existencias · 2,847 SKUs",
+    title: "Filtros multidimensionales sobre todo el catálogo",
+    body: "Por clase terapéutica, ubicación, estado de stock, condiciones de almacenamiento (frío, controlado), fabricante. Cada SKU muestra stock total distribuido entre ubicaciones y semáforo de cobertura.",
+    metric: { value: "8 facetas", label: "combinables sin recargar la vista" },
+    side: "right",
+  },
+  {
+    id: "drilldown",
+    chapter: 1,
+    route: "producto:P-002",
+    routeTab: "demanda",
+    target: '[data-tour="producto-tabs"]',
+    padding: 12,
+    eyebrow: "Drill-down de producto",
+    title: "Demanda IA: por qué hay que pedir y cuánto",
+    body: "Cada ficha incluye predicción de consumo, días de cobertura proyectados, lotes activos por caducidad, historial de movimientos y recomendaciones automáticas. La pestaña Demanda IA es el corazón del módulo.",
+    metric: { value: "4 modelos", label: "histórico · estacional · clínico · sustituciones" },
+    side: "top",
+  },
+  {
+    id: "lotes",
+    chapter: 1,
+    route: "lotes",
+    target: '[data-tour="lotes-bandas"]',
+    padding: 12,
+    eyebrow: "Lotes y caducidades",
+    title: "FEFO en bandas temporales, ordenado por urgencia",
+    body: "Vencidos · 0-15 días · 15-30 · 30-90 · más de 90. Cada lote propone una acción: dar de baja, promocionar uso, transferir a un sub-almacén con mayor rotación, o dejar al ciclo FEFO automático.",
+    metric: { value: "0.62%", label: "tasa proyectada de mermas · meta del módulo: < 1%" },
+    side: "right",
+  },
+  {
+    id: "movimientos",
+    chapter: 1,
+    route: "movimientos",
+    target: '[data-tour="mov-tabla"]',
+    padding: 12,
+    eyebrow: "Trazabilidad punto a punto",
+    title: "Cada pieza, cada movimiento, cada operador",
+    body: "Entradas, salidas, ajustes, mermas y traspasos en un solo libro consultable. Origen, destino, lote, operador, validador y referencia. Es la base de la auditoría y del cumplimiento NOM-220.",
+    metric: { value: "284 mov.", label: "registrados hoy · todos firmados" },
+    side: "right",
+  },
+
+  // ════════════════ CAPÍTULO 2 · CONTROL REGULATORIO ════════════════
+  {
+    id: "oc",
+    chapter: 2,
+    route: "oc",
+    target: '[data-tour="oc-tabla"]',
+    padding: 12,
+    eyebrow: "Capítulo 2 · Control regulatorio",
+    title: "Órdenes de compra sugeridas por IA",
+    body: "El sistema agrupa SKUs por proveedor cuando detecta que el stock proyectado caerá bajo el punto de reorden, considerando lead times reales y SLAs históricos. La jefa de farmacia aprueba o ajusta — no captura desde cero.",
+    metric: { value: "11 OCs", label: "sugeridas esta semana · 73% aprobadas tal cual" },
+    side: "right",
+  },
+  {
+    id: "productos",
+    chapter: 2,
+    route: "productos",
+    target: '[data-tour="productos-tabla"]',
+    padding: 12,
+    eyebrow: "Catálogo maestro",
+    title: "Una fuente de verdad por SKU",
+    body: "Presentación, sustancia activa, clase terapéutica, GTIN/código de barras, fabricante, costo unitario, banderas de controlado o cadena fría. Vinculado a las maestras de COFEPRIS y al catálogo del hospital.",
+    metric: { value: "847", label: "productos activos · 4,200 GTINs registrados" },
+    side: "right",
+  },
+  {
+    id: "ubicaciones",
+    chapter: 2,
+    route: "ubicaciones",
+    target: '[data-tour="ubic-arbol"]',
+    padding: 12,
+    eyebrow: "Almacenes y ubicaciones",
+    title: "Estructura jerárquica con condiciones por nodo",
+    body: "Almacén central, sub-almacenes de servicio, refrigeradores, anaqueles, gavetas. Cada nodo tiene capacidad, temperatura objetivo, restricciones (controlado, peligroso) y dueño operativo.",
+    metric: { value: "32 nodos", label: "monitoreados · 4 con sensor IoT en tiempo real" },
+    side: "right",
+  },
+  {
+    id: "reportes",
+    chapter: 2,
+    route: "reportes",
+    target: '[data-tour="reportes-grid"]',
+    padding: 12,
+    eyebrow: "Reportes regulatorios",
+    title: "Cumplimiento sin Excel ni armarios de papel",
+    body: "Genera el aviso mensual de movimientos de controlados a SSA, conciliaciones de inventario, mermas para auditoría interna y reportes de costos. Firmado digitalmente, exportable en PDF y XML oficial.",
+    metric: { value: "1 click", label: "vs. 3 días de captura manual cada mes" },
+    side: "right",
+  },
+
+  // ════════════════ CAPÍTULO 3 · INTELIGENCIA ════════════════
+  {
+    id: "insights",
+    chapter: 3,
+    route: "insights",
+    target: '[data-tour="insights-grid"]',
+    padding: 12,
+    eyebrow: "Capítulo 3 · Inteligencia",
+    title: "Patrones que nadie estaba mirando",
+    body: "Anomalías de consumo, retrasos de proveedor, lotes con baja rotación, oportunidades de transferencia, riesgos de auditoría. Cada insight viene con evidencia y una acción concreta — no son sugerencias vagas.",
+    metric: { value: "5 insights", label: "activos hoy · ROI estimado: $312K MXN" },
+    side: "right",
+  },
+  {
+    id: "cmdk",
+    chapter: 3,
+    route: "dashboard",
+    target: '[data-tour="search"]',
+    padding: 8,
+    eyebrow: "Command palette",
+    title: "⌘K es el atajo más usado por la jefa de farmacia",
+    body: "Buscar producto, lote, OC o paciente · ejecutar acciones (nueva recepción, OC, conteo) · saltar a cualquier pantalla. Un solo lugar para todo, sin levantar las manos del teclado.",
+    metric: { value: "⌘ + K", label: "abre · ↑↓ navega · Enter ejecuta" },
+    side: "bottom",
+  },
+  {
+    id: "tema",
+    chapter: 3,
+    route: "dashboard",
+    target: '[data-tour="theme-toggle"]',
+    padding: 6,
+    eyebrow: "Tema claro / oscuro",
+    title: "Adaptado a la luz de cada turno",
+    body: "Tema oscuro para turno nocturno y áreas con poca luz · tema claro para impresión y reportes. Toda la paleta clínica está calibrada para WCAG AA en ambos modos.",
+    metric: { value: "AA", label: "contraste validado en 100% de la UI" },
+    side: "bottom",
+  },
+
+  // ─── Cierre ───
+  {
+    id: "outro",
+    chapter: 0,
+    route: "dashboard",
+    target: "fullscreen",
+    eyebrow: "Fin del recorrido",
+    title: "Gracias",
+    body: "App Médica·AI · módulo Inventario. Construido sobre tres principios: cumplimiento sin fricción, decisiones asistidas por IA, y respeto absoluto por el tiempo de la jefa de farmacia.",
+    metric: { value: "16/16", label: "paradas completadas" },
+    side: "center",
+  },
+];
+
+/* ─────────────────── HOOK: bbox del target ─────────────────── */
+
+const useTargetBox = (target, active) => {
+  const [box, setBox] = useStateTour(null);
+
+  useLayoutEffectTour(() => {
+    if (!active) { setBox(null); return; }
+    if (!target || target === "fullscreen") { setBox({ full: true }); return; }
+
+    let raf = 0;
+    const measure = () => {
+      const el = document.querySelector(target);
+      if (!el) { setBox(null); return; }
+      // Asegúrate de que esté visible (scroll into view)
+      const rect = el.getBoundingClientRect();
+      const inView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+      if (!inView) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        // Volver a medir tras el scroll
+        setTimeout(measure, 380);
+        return;
+      }
+      setBox({
+        x: rect.left, y: rect.top,
+        w: rect.width, h: rect.height,
+        full: false,
+      });
+    };
+
+    measure();
+
+    // Recalcular en resize/scroll
+    const onResize = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(measure); };
+    window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onResize, true);
+    const interval = setInterval(measure, 600); // por si la app rerendea
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onResize, true);
+      clearInterval(interval);
+      cancelAnimationFrame(raf);
+    };
+  }, [target, active]);
+
+  return box;
+};
+
+/* ─────────────────── SPOTLIGHT MASK ─────────────────── */
+
+const SpotlightMask = ({ box }) => {
+  const W = window.innerWidth, H = window.innerHeight;
+  if (!box || box.full) {
+    return (
+      <div style={{
+        position: "fixed", inset: 0, zIndex: 9998,
+        background: "rgba(8, 14, 22, 0.78)",
+        backdropFilter: "blur(2px)",
+        WebkitBackdropFilter: "blur(2px)",
+        pointerEvents: "auto",
+        transition: "background 280ms ease",
+      }}/>
+    );
+  }
+  const pad = 0;
+  const x = Math.max(8, box.x - pad);
+  const y = Math.max(8, box.y - pad);
+  const w = Math.min(W - 16, box.w + pad * 2);
+  const h = Math.min(H - 16, box.h + pad * 2);
+  const r = 12;
+
+  return (
+    <>
+      <svg width={W} height={H} style={{
+        position: "fixed", inset: 0, zIndex: 9998, pointerEvents: "auto",
+      }}>
+        <defs>
+          <mask id="tour-mask">
+            <rect x="0" y="0" width={W} height={H} fill="white"/>
+            <rect x={x} y={y} width={w} height={h} rx={r} ry={r} fill="black"/>
+          </mask>
+        </defs>
+        <rect x="0" y="0" width={W} height={H}
+          fill="rgba(8, 14, 22, 0.78)"
+          mask="url(#tour-mask)"
+          style={{ transition: "all 320ms cubic-bezier(.2,.7,.2,1)" }}/>
+      </svg>
+      {/* Glow turquesa pulsante alrededor del cutout */}
+      <div style={{
+        position: "fixed",
+        left: x - 2, top: y - 2,
+        width: w + 4, height: h + 4,
+        borderRadius: r + 2,
+        boxShadow: "0 0 0 1.5px var(--ai-accent), 0 0 0 6px rgba(102,217,210,.18), 0 0 24px 6px rgba(102,217,210,.32)",
+        pointerEvents: "none",
+        zIndex: 9999,
+        animation: "tour-pulse 2.4s ease-in-out infinite",
+        transition: "all 320ms cubic-bezier(.2,.7,.2,1)",
+      }}/>
+    </>
+  );
+};
+
+/* ─────────────────── TOUR CARD (narrativa) ─────────────────── */
+
+const ChapterChip = ({ n }) => {
+  const labels = ["", "Operación", "Control regulatorio", "Inteligencia"];
+  if (!n) return null;
+  return (
+    <div style={{
+      display: "inline-flex", alignItems: "center", gap: 6,
+      padding: "3px 8px", borderRadius: 999,
+      background: "rgba(102,217,210,.1)",
+      border: "1px solid rgba(102,217,210,.28)",
+      fontFamily: "var(--font-mono)", fontSize: 10,
+      color: "var(--ai-accent)",
+      textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600,
+    }}>
+      <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--ai-accent)" }}/>
+      Capítulo {n} · {labels[n]}
+    </div>
+  );
+};
+
+const TourCard = ({ step, idx, total, onPrev, onNext, onClose, onTogglePlay, playing, box }) => {
+  const W = window.innerWidth, H = window.innerHeight;
+  const cardW = 460;
+  const cardMaxH = 380;
+
+  // Posicionar la card respecto al cutout
+  let cardStyle = {};
+  let isCenter = false;
+  if (!box || box.full || step.side === "center") {
+    cardStyle = { left: "50%", top: "50%", transform: "translate(-50%,-50%)" };
+    isCenter = true;
+  } else {
+    const margin = 28;
+    const side = step.side || "right";
+    let preferred = side;
+
+    // Validar que cabe; si no, voltear
+    const canRight = box.x + box.w + margin + cardW < W - 16;
+    const canLeft  = box.x - margin - cardW > 16;
+    const canBelow = box.y + box.h + margin + cardMaxH < H - 16;
+    const canAbove = box.y - margin - cardMaxH > 16;
+
+    if (preferred === "right" && !canRight) preferred = canLeft ? "left" : (canBelow ? "bottom" : "top");
+    if (preferred === "left"  && !canLeft)  preferred = canRight ? "right" : (canBelow ? "bottom" : "top");
+    if (preferred === "bottom" && !canBelow) preferred = canAbove ? "top" : (canRight ? "right" : "left");
+    if (preferred === "top"   && !canAbove) preferred = canBelow ? "bottom" : (canRight ? "right" : "left");
+
+    if (preferred === "right") {
+      cardStyle = { left: box.x + box.w + margin, top: Math.max(16, Math.min(H - cardMaxH - 16, box.y + box.h/2 - cardMaxH/2)) };
+    } else if (preferred === "left") {
+      cardStyle = { left: Math.max(16, box.x - margin - cardW), top: Math.max(16, Math.min(H - cardMaxH - 16, box.y + box.h/2 - cardMaxH/2)) };
+    } else if (preferred === "bottom") {
+      cardStyle = { top: box.y + box.h + margin, left: Math.max(16, Math.min(W - cardW - 16, box.x + box.w/2 - cardW/2)) };
+    } else {
+      cardStyle = { top: Math.max(16, box.y - margin - cardMaxH), left: Math.max(16, Math.min(W - cardW - 16, box.x + box.w/2 - cardW/2)) };
+    }
+  }
+
+  return (
+    <div style={{
+      position: "fixed", zIndex: 10000,
+      width: cardW,
+      ...cardStyle,
+      background: "var(--bg-card)",
+      border: "1px solid var(--border-default)",
+      borderRadius: "var(--r-lg)",
+      boxShadow: "0 24px 64px rgba(0,0,0,.55), 0 0 0 1px rgba(102,217,210,.08)",
+      overflow: "hidden",
+      animation: isCenter ? "tour-card-in-center 360ms ease" : "tour-card-in 360ms cubic-bezier(.2,.7,.2,1)",
+    }}>
+      {/* Top accent line */}
+      <div style={{
+        height: 2,
+        background: "linear-gradient(90deg, transparent, var(--ai-accent), transparent)",
+        opacity: 0.6,
+      }}/>
+
+      <div style={{ padding: "18px 22px 16px 22px" }}>
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 12 }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            {step.chapter ? <ChapterChip n={step.chapter}/> :
+              <div style={{
+                fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--ai-accent)",
+                textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600,
+              }}>{step.eyebrow}</div>
+            }
+            {step.chapter > 0 && (
+              <div style={{ marginTop: 8, fontFamily: "var(--font-mono)", fontSize: 10.5, color: "var(--text-tertiary)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                {step.eyebrow}
+              </div>
+            )}
+          </div>
+          <button onClick={onClose} title="Salir del tour"
+            style={{
+              width: 26, height: 26, borderRadius: 6,
+              background: "transparent", color: "var(--text-tertiary)",
+              border: "1px solid var(--border-subtle)",
+              display: "grid", placeItems: "center",
+            }}>
+            <Icon name="x" size={12}/>
+          </button>
+        </div>
+
+        {/* Title */}
+        <div style={{
+          fontSize: step.chapter === 0 ? 22 : 18,
+          fontWeight: 600,
+          letterSpacing: "-0.02em",
+          color: "var(--text-primary)",
+          lineHeight: 1.25,
+          marginBottom: 10,
+          textWrap: "pretty",
+        }}>{step.title}</div>
+
+        {/* Body */}
+        <div style={{
+          fontSize: 13, lineHeight: 1.55, color: "var(--text-secondary)",
+          marginBottom: 14, textWrap: "pretty",
+        }}>{step.body}</div>
+
+        {/* Metric */}
+        {step.metric && (
+          <div style={{
+            display: "flex", alignItems: "baseline", gap: 12,
+            padding: "12px 14px",
+            background: "rgba(102,217,210,.06)",
+            border: "1px solid rgba(102,217,210,.18)",
+            borderRadius: "var(--r-md)",
+            marginBottom: 16,
+          }}>
+            <div style={{
+              fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em",
+              color: "var(--ai-accent)", fontFamily: "var(--font-sans)",
+              flexShrink: 0,
+            }}>{step.metric.value}</div>
+            <div style={{
+              fontSize: 11.5, color: "var(--text-secondary)", lineHeight: 1.4,
+              fontFamily: "var(--font-mono)",
+            }}>{step.metric.label}</div>
+          </div>
+        )}
+
+        {/* Footer: progress + controls */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+          <div style={{
+            fontFamily: "var(--font-mono)", fontSize: 11,
+            color: "var(--text-tertiary)",
+          }}>
+            {String(idx + 1).padStart(2, "0")} <span style={{ color: "var(--text-tertiary)", opacity: 0.5 }}>/ {String(total).padStart(2, "0")}</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <button onClick={onPrev} disabled={idx === 0} title="Anterior"
+              className="tour-btn tour-btn-ghost"
+              style={{
+                width: 30, height: 30, borderRadius: "var(--r-md)",
+                background: "transparent",
+                border: "1px solid var(--border-default)",
+                color: idx === 0 ? "var(--text-tertiary)" : "var(--text-primary)",
+                display: "grid", placeItems: "center",
+                opacity: idx === 0 ? 0.6 : 1,
+                cursor: idx === 0 ? "not-allowed" : "pointer",
+              }}>
+              <Icon name="chevron-left" size={13}/>
+            </button>
+            <button onClick={onTogglePlay} title={playing ? "Pausar autoplay" : "Reproducir autoplay"}
+              className="tour-btn tour-btn-ghost"
+              style={{
+                width: 30, height: 30, borderRadius: "var(--r-md)",
+                background: playing ? "rgba(102,217,210,.14)" : "transparent",
+                border: "1px solid " + (playing ? "var(--ai-accent-line)" : "var(--border-default)"),
+                color: playing ? "var(--ai-accent)" : "var(--text-primary)",
+                display: "grid", placeItems: "center",
+                cursor: "pointer",
+              }}>
+              <Icon name={playing ? "pause" : "play"} size={12}/>
+            </button>
+            <button onClick={onNext} title={idx === total - 1 ? "Cerrar" : "Siguiente"}
+              className="tour-btn tour-btn-primary"
+              style={{
+                height: 30, padding: "0 14px",
+                borderRadius: "var(--r-md)",
+                background: "var(--ai-accent)",
+                color: "#03161A",
+                border: "none",
+                fontFamily: "var(--font-sans)", fontSize: 12.5, fontWeight: 600,
+                display: "inline-flex", alignItems: "center", gap: 6,
+                cursor: "pointer",
+              }}>
+              {idx === total - 1 ? "Finalizar" : "Siguiente"}
+              <Icon name={idx === total - 1 ? "check" : "chevron-right"} size={13} style={{ color: "#03161A" }}/>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div style={{ height: 2, background: "var(--bg-card-2)" }}>
+        <div style={{
+          height: "100%",
+          width: `${((idx + 1) / total) * 100}%`,
+          background: "linear-gradient(90deg, var(--ai-accent-line), var(--ai-accent))",
+          transition: "width 320ms cubic-bezier(.2,.7,.2,1)",
+        }}/>
+      </div>
+    </div>
+  );
+};
+
+/* ─────────────────── CONTENEDOR PRINCIPAL ─────────────────── */
+
+const TourOverlay = ({ active, onRouteChange, onClose }) => {
+  const [idx, setIdx] = useStateTour(0);
+  const [playing, setPlaying] = useStateTour(false);
+  const step = TOUR_STEPS[idx];
+  const total = TOUR_STEPS.length;
+  const box = useTargetBox(step?.target, active);
+
+  // Navegar cuando cambia la ruta de la step
+  useEffectTour(() => {
+    if (!active || !step) return;
+    onRouteChange(step.route);
+  }, [active, idx]);
+
+  // Reset al abrir
+  useEffectTour(() => {
+    if (active) { setIdx(0); setPlaying(false); }
+  }, [active]);
+
+  // Autoplay
+  useEffectTour(() => {
+    if (!active || !playing) return;
+    const t = setTimeout(() => {
+      if (idx < total - 1) setIdx(i => i + 1);
+      else setPlaying(false);
+    }, 8500);
+    return () => clearTimeout(t);
+  }, [active, playing, idx]);
+
+  // Teclado
+  useEffectTour(() => {
+    if (!active) return;
+    const onKey = (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); next(); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
+      else if (e.key === "Escape") { e.preventDefault(); onClose(); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [active, idx]);
+
+  if (!active) return null;
+
+  const next = () => {
+    if (idx < total - 1) setIdx(i => i + 1);
+    else onClose();
+  };
+  const prev = () => idx > 0 && setIdx(i => i - 1);
+
+  return (
+    <>
+      <SpotlightMask box={box}/>
+      <TourCard step={step} idx={idx} total={total}
+        onPrev={prev} onNext={next} onClose={onClose}
+        onTogglePlay={() => setPlaying(p => !p)} playing={playing}
+        box={box}/>
+
+      {/* Hint inferior */}
+      <div style={{
+        position: "fixed", bottom: 18, left: "50%", transform: "translateX(-50%)",
+        zIndex: 10000, display: "flex", gap: 10, alignItems: "center",
+        padding: "6px 12px",
+        background: "rgba(8,14,22,.6)",
+        border: "1px solid rgba(255,255,255,.06)",
+        borderRadius: 999,
+        fontFamily: "var(--font-mono)", fontSize: 10.5,
+        color: "rgba(255,255,255,.5)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+      }}>
+        <span>← →</span><span style={{ opacity: 0.5 }}>navegar</span>
+        <span style={{ opacity: 0.3 }}>·</span>
+        <span>SPACE</span><span style={{ opacity: 0.5 }}>siguiente</span>
+        <span style={{ opacity: 0.3 }}>·</span>
+        <span>ESC</span><span style={{ opacity: 0.5 }}>salir</span>
+      </div>
+    </>
+  );
+};
+
+Object.assign(window, { TourOverlay, TOUR_STEPS });
+
+})();
+</script>
+<script type="text/babel">
+;(function(){
 const { useState, useEffect, useCallback } = React;
 const {
   Icon, Sparkline,
@@ -4189,6 +5017,7 @@ const {
   Existencias, DetalleProducto, FilterGroup, Check, Pill,
   Lotes, Recepciones, OrdenesCompra, ConteoCiclico, Alertas, Controlados,
   Reportes, Movimientos, Productos, Ubicaciones, InsightsIA, Login,
+  TourOverlay,
 } = window;
 
 const SCREEN_LABELS = {
@@ -4246,6 +5075,19 @@ const App = () => {
   const [route, setRoute] = useState("dashboard");
   const [productoId, setProductoId] = useState(null);
   const [palette, setPalette] = useState(false);
+  const [theme, setTheme] = useState(() => window.__getTheme());
+  const [navCollapsed, setNavCollapsed] = useState(false);
+  const [tourActive, setTourActive] = useState(false);
+
+  useEffect(() => {
+    const onTheme = (e) => setTheme(e.detail);
+    window.addEventListener('themechange', onTheme);
+    return () => window.removeEventListener('themechange', onTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    window.__setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
 
   useEffect(() => {
     let gPressed = false;
@@ -4329,22 +5171,46 @@ const App = () => {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-page)" }}>
-      <SidebarNav active={route} onNav={navigate} />
+      <SidebarNav active={route} onNav={navigate} collapsed={navCollapsed} onToggleCollapsed={() => setNavCollapsed(c => !c)} />
 
       <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
         <Topbar
           breadcrumb={breadcrumb}
           onCmdK={() => setPalette(true)}
           actions={
-            <button onClick={() => setAuthed(false)} title="Cerrar sesión"
-              style={{
-                height: 32, padding: "0 10px",
-                background: "transparent", color: "var(--text-tertiary)",
-                border: "1px solid var(--border-subtle)", borderRadius: "var(--r-md)",
-                fontSize: 11.5, fontFamily: "var(--font-mono)", display: "inline-flex", alignItems: "center", gap: 6,
-              }}>
-              <Icon name="logout" size={12}/> SALIR
-            </button>
+            <React.Fragment>
+              <button onClick={() => setTourActive(true)} title="Tour guiado del módulo"
+                style={{
+                  height: 32, padding: "0 12px",
+                  background: "transparent",
+                  color: "var(--ai-accent)",
+                  border: "1px solid var(--ai-accent-line)",
+                  borderRadius: "var(--r-md)",
+                  fontSize: 12, fontWeight: 500,
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                }}>
+                <Icon name="play" size={11}/> Tour guiado
+              </button>
+              <button onClick={toggleTheme} title={theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
+                data-tour="theme-toggle"
+                style={{
+                  height: 32, width: 32,
+                  background: "transparent", color: "var(--text-secondary)",
+                  border: "1px solid var(--border-subtle)", borderRadius: "var(--r-md)",
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
+                }}>
+                <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={14}/>
+              </button>
+              <button onClick={() => setAuthed(false)} title="Cerrar sesión"
+                style={{
+                  height: 32, padding: "0 10px",
+                  background: "transparent", color: "var(--text-tertiary)",
+                  border: "1px solid var(--border-subtle)", borderRadius: "var(--r-md)",
+                  fontSize: 11.5, fontFamily: "var(--font-mono)", display: "inline-flex", alignItems: "center", gap: 6,
+                }}>
+                <Icon name="logout" size={12}/> SALIR
+              </button>
+            </React.Fragment>
           }
         />
 
@@ -4354,6 +5220,12 @@ const App = () => {
       </div>
 
       <CommandPalette open={palette} onClose={() => setPalette(false)} onNav={navigate} />
+
+      <TourOverlay
+        active={tourActive}
+        onClose={() => setTourActive(false)}
+        onRouteChange={navigate}
+      />
     </div>
   );
 };
