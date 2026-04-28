@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit Digital — Conectadas y Seguras</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020410;--surface:#0A0A18;--surface2:#0F0F1E;
+  --orange:#F97316;--orange2:#FB923C;--orange3:#EA580C;
+  --purple:#7C3AED;--purple2:#6D28D9;
+  --teal:#14B8A6;--teal2:#0D9488;
+  --blue:#3B82F6;
+  --w:#FFFFFF;--s2:#E2E8F0;--s4:#94A3B8;--s5:#64748B;--s6:#475569;
+  --glass:rgba(255,255,255,0.05);--gb:rgba(255,255,255,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  background:#111;
+  font-family:'DM Sans',sans-serif;
+  padding:40px 20px;
+  display:flex;flex-direction:column;align-items:center;gap:48px;
+}
+
+/* TOOLBAR */
+.toolbar{
+  display:flex;align-items:center;gap:16px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;padding:12px 24px;
+  position:sticky;top:20px;z-index:100;
+  backdrop-filter:blur(20px);
+}
+.toolbar-title{font-family:'Syne',sans-serif;font-size:13px;color:var(--s4);letter-spacing:.12em;text-transform:uppercase}
+.btn-print{
+  display:flex;align-items:center;gap:8px;
+  background:var(--orange);color:var(--w);
+  border:none;border-radius:8px;
+  padding:10px 20px;font-size:14px;font-weight:500;
+  cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:background .2s
+}
+.btn-print:hover{background:var(--orange2)}
+.btn-print svg{width:16px;height:16px}
+
+/* A5 CARD BASE */
+.card{
+  width:559px;min-height:794px;
+  background:var(--bg);
+  border-radius:16px;
+  position:relative;overflow:hidden;
+  page-break-after:always;
+  box-shadow:0 32px 80px rgba(0,0,0,.7);
+}
+
+/* BLOB GRADIENTS */
+.blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
+
+/* CONTENT LAYER */
+.inner{position:relative;z-index:1;padding:40px 36px;height:100%;display:flex;flex-direction:column}
+
+/* CARD HEADER */
+.card-header{margin-bottom:24px}
+.kit-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--orange);font-weight:500;margin-bottom:10px;
+}
+.kit-badge-dot{width:4px;height:4px;background:var(--orange);border-radius:50%}
+.card-title{
+  font-family:'Syne',sans-serif;
+  font-size:26px;font-weight:800;color:var(--w);
+  line-height:1.1;letter-spacing:-.02em
+}
+.card-title span{color:var(--orange)}
+.card-subtitle{font-size:12px;color:var(--s5);margin-top:6px;line-height:1.5}
+.title-line{width:36px;height:3px;background:var(--orange);border-radius:2px;margin-top:12px}
+
+/* SECTION LABEL */
+.sec-label{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  font-weight:500;margin-bottom:8px;margin-top:18px
+}
+.sl-orange{color:var(--orange)}
+.sl-teal{color:var(--teal)}
+.sl-purple{color:#A78BFA}
+.sl-blue{color:var(--blue)}
+
+/* CHECK ITEM */
+.check-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.04)
+}
+.check-item:last-child{border-bottom:none}
+.checkbox{
+  width:16px;height:16px;min-width:16px;
+  border:1.5px solid rgba(255,255,255,0.2);
+  border-radius:4px;margin-top:1px;flex-shrink:0
+}
+.check-text{font-size:12px;color:var(--s2);line-height:1.5}
+.check-text em{font-style:normal;color:var(--w);font-weight:500}
+
+/* CHECK SECTION CARD */
+.sec-card{
+  background:var(--glass);
+  border:1px solid var(--gb);
+  border-radius:12px;padding:14px 16px;
+  margin-bottom:10px
+}
+
+/* STEP (pasos grandes) */
+.big-step{
+  display:flex;gap:16px;margin-bottom:14px;
+  background:var(--glass);border:1px solid var(--gb);
+  border-radius:12px;padding:16px
+}
+.step-num-big{
+  font-family:'Syne',sans-serif;
+  font-size:44px;font-weight:800;
+  line-height:1;flex-shrink:0;width:44px;
+  opacity:.25
+}
+.step-body h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--w);margin-bottom:5px}
+.step-body p{font-size:12px;color:var(--s4);line-height:1.55}
+.step-body em{font-style:normal;color:var(--w);font-weight:500}
+
+/* PROMPT BOX */
+.prompt-block{
+  background:#0A0E1A;border:1px solid rgba(20,184,166,.2);
+  border-radius:10px;padding:12px 14px;margin-bottom:10px
+}
+.prompt-num{
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--teal);font-weight:500;margin-bottom:5px
+}
+.prompt-text{
+  font-family:'Courier New',monospace;
+  font-size:10.5px;color:#7DD3FC;line-height:1.6
+}
+.prompt-text .var{color:var(--orange2)}
+
+/* APP CARD */
+.app-card{
+  display:flex;gap:12px;align-items:flex-start;
+  background:var(--glass);border:1px solid var(--gb);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px
+}
+.app-icon{
+  width:36px;height:36px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+}
+.app-icon.orange{background:rgba(249,115,22,.15)}
+.app-icon.teal{background:rgba(20,184,166,.15)}
+.app-icon.purple{background:rgba(124,58,237,.15)}
+.app-icon.blue{background:rgba(59,130,246,.15)}
+.app-info h4{font-size:13px;color:var(--w);font-weight:500;margin-bottom:3px}
+.app-info p{font-size:11px;color:var(--s5);line-height:1.45}
+.free-badge{
+  display:inline-block;margin-top:4px;
+  background:rgba(20,184,166,.12);
+  border:1px solid rgba(20,184,166,.25);
+  color:var(--teal);font-size:9px;
+  padding:2px 8px;border-radius:100px;letter-spacing:.08em
+}
+
+/* TOOLS LIST */
+.tool-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(20,184,166,.08);border:1px solid rgba(20,184,166,.2);
+  border-radius:100px;padding:5px 12px;margin:4px 3px;
+  font-size:11px;color:var(--teal)
+}
+
+/* SOS CARD */
+.sos-card{
+  background:rgba(249,115,22,.08);
+  border:1px solid rgba(249,115,22,.25);
+  border-radius:12px;padding:14px 16px;margin-top:10px
+}
+.sos-card h3{font-size:13px;color:var(--orange);font-weight:500;margin-bottom:6px}
+.sos-card p{font-size:11px;color:var(--s4);line-height:1.55}
+.sos-card em{font-style:normal;color:var(--w)}
+
+/* QR MATERIAL */
+.qr-wrap{
+  display:flex;flex-direction:column;align-items:center;
+  padding:24px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--gb);
+  border-radius:16px;margin-bottom:16px
+}
+#qr-canvas{border-radius:8px;background:white;padding:8px}
+.qr-label{font-size:10px;color:var(--s5);margin-top:10px;letter-spacing:.1em;text-transform:uppercase}
+.qr-url{font-size:11px;color:var(--orange);margin-top:3px}
+
+/* RESOURCE ITEM */
+.res-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)
+}
+.res-item:last-child{border-bottom:none}
+.res-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.res-dot.orange{background:var(--orange)}
+.res-dot.teal{background:var(--teal)}
+.res-dot.purple{background:var(--purple)}
+.res-dot.blue{background:var(--blue)}
+.res-text h4{font-size:12px;color:var(--w);font-weight:500}
+.res-text p{font-size:10px;color:var(--s5)}
+
+/* FOOTER OF EACH CARD */
+.card-footer{
+  margin-top:auto;padding-top:16px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;justify-content:space-between;align-items:center
+}
+.footer-tag{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--s6)}
+.footer-logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--s5)}
+.footer-logo span{color:var(--orange)}
+
+/* DIVIDER */
+.divider{width:100%;height:1px;background:rgba(255,255,255,.06);margin:10px 0}
+
+/* ========= PRINT ========= */
+@media print{
+  body{background:white;padding:0;gap:0}
+  .toolbar{display:none}
+  .card{
+    border-radius:0;box-shadow:none;
+    width:148mm;min-height:210mm;height:210mm;
+    page-break-after:always;break-after:page;
+  }
+  .inner{padding:28px 26px}
+  @page{size:A5 portrait;margin:0}
+}
+</style>
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <span class="toolbar-title">Kit Digital · Conectadas y Seguras · 5 materiales</span>
+  <button class="btn-print" onclick="window.print()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+    Imprimir todos (A5)
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MATERIAL 1 — CHECKLIST DE PRIVACIDAD -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="card" id="m1">
+  <!-- Blobs -->
+  <div class="blob" style="width:320px;height:320px;top:-120px;right:-80px;background:radial-gradient(circle,rgba(249,115,22,.22) 0%,transparent 70%)"></div>
+  <div class="blob" style="width:280px;height:280px;bottom:-80px;left:-60px;background:radial-gradient(circle,rgba(124,58,237,.16) 0%,transparent 70%)"></div>
+  <!-- Decorative circle -->
+  <div style="position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,.04);bottom:-80px;right:-80px;z-index:0"></div>
+
+  <div class="inner">
+    <div class="card-header">
+      <div class="kit-badge"><div class="kit-badge-dot"></div>Herramienta #1</div>
+      <h1 class="card-title">Checklist de<br><span>privacidad</span></h1>
+      <p class="card-subtitle">Revisa estos ajustes HOY en tu teléfono — tarda 5 minutos</p>
+      <div class="title-line"></div>
+    </div>
+
+    <!-- Facebook -->
+    <p class="sec-label sl-orange">Facebook</p>
+    <div class="sec-card">
+      <div class="check-item">
+        <div class="checkbox"></div>
+        <p class="check-text">Configuración → Privacidad → <em>¿Quién puede ver mis publicaciones?</em> → Solo amigos</p>
+      </div>
+      <div class="check-item">
+        <div class="checkbox"></div>
+        <p class="check-text">Configuración → Ubicación → <em>Desactivar historial de ubicaciones</em></p>
+      </div>
+      <div class="check-item">
+        <div class="checkbox"></div>
+        <p class="check-text">Configuración → Apps conectadas → <em>Eliminar las que no reconozcas</em></p>
+      </div>
+      <div class="check-item">
+        <div class="checkbox"></div>
+        <p class="check-text">Perfil → Información → Revisar que no tengas <em>teléfono o dirección públicos</em></p>
+      </div>
+    </div>
+
+    <!-- WhatsApp -->
+    <p class="sec-label sl-teal">WhatsApp</p>
+    <div class="sec-card" style="border-color:rgba(20,184,166,.15)">
+      <div class="check-item">
+        <div class="checkbox" style="border-color:rgba(20,184,166,.4)"></div>
+        <p class="check-text">Ajustes → Privacidad → Foto de perfil → <em>Solo mis contactos</em></p>
+      </div>
+      <div class="check-item">
+        <div class="checkbox" style="border-color:rgba(20,184,166,.4)"></div>
+        <p class="check-text">Ajustes → Privacidad → Última vez en línea → <em>Nadie</em></p>
+      </div>
+      <div class="check-item">
+        <div class="checkbox" style="border-color:rgba(20,184,166,.4)"></div>
+        <p class="check-text">Ajustes → Cuenta → <em>Verificación en dos pasos → Activar</em> (guarda el PIN)</p>
+      </div>
+    </div>
+
+    <!-- Instagram -->
+    <p class="sec-label sl-purple">Instagram</p>
+    <div class="sec-card" style="border-color:rgba(124,58,237,.2)">
+      <div class="check-item">
+        <div class="checkbox" style="border-color:rgba(167,139,250,.4)"></div>
+        <p class="check-text">Configuración → Privacidad → <em>Cuenta privada → Activar</em></p>
+      </div>
+      <div class="check-item">
+        <div class="checkbox" style="border-color:rgba(167,139,250,.4)"></div>
+        <p class="check-text">Configuración → Privacidad → Mensajes → <em>Solo personas que sigo</em></p>
+      </div>
+    </div>
+
+    <!-- Teléfono -->
+    <p class="sec-label sl-blue">Teléfono general</p>
+    <div class="sec-card" style="border-color:rgba(59,130,246,.2)">
+      <div class="check-item">
+        <div class="checkbox" style="border-color:rgba(59,130,246,.4)"></div>
+        <p class="check-text">Ajustes → Apps → Revisar <em>permisos de micrófono y cámara</em> por aplicación</p>
+      </div>
+      <div class="check-item">
+        <div class="checkbox" style="border-color:rgba(59,130,246,.4)"></div>
+        <p class="check-text">Cámara → Ajustes → <em>Desactivar ubicación en fotos</em></p>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <span class="footer-tag">Kit Digital · Conectadas y Seguras</span>
+      <span class="footer-logo">FINEM <span>Politics</span></span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MATERIAL 2 — PAUSA ANTES DE COMPARTIR -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="card" id="m2">
+  <div class="blob" style="width:350px;height:350px;top:-100px;left:-100px;background:radial-gradient(circle,rgba(20,184,166,.18) 0%,transparent 70%)"></div>
+  <div class="blob" style="width:300px;height:300px;bottom:-80px;right:-60px;background:radial-gradient(circle,rgba(249,115,22,.16) 0%,transparent 70%)"></div>
+  <div style="position:absolute;width:260px;height:260px;border-radius:50%;border:1px solid rgba(20,184,166,.06);top:60px;right:-60px;z-index:0"></div>
+
+  <div class="inner">
+    <div class="card-header">
+      <div class="kit-badge"><div class="kit-badge-dot" style="background:var(--teal)"></div><span style="color:var(--teal)">Herramienta #2</span></div>
+      <h1 class="card-title" style="font-size:28px">Pausa antes de<br><span style="color:var(--teal)">compartir</span></h1>
+      <p class="card-subtitle">Antes de reenviar cualquier noticia, imagen o audio</p>
+      <div class="title-line" style="background:var(--teal)"></div>
+    </div>
+
+    <!-- 3 Pasos -->
+    <div class="big-step">
+      <div class="step-num-big" style="color:var(--teal)">01</div>
+      <div class="step-body">
+        <h3>¿Quién lo dice?</h3>
+        <p>Busca el nombre del medio en Google. Si <em>no existe o la URL es rara</em> (ej: noticias-mx-hoy.net), es sospechoso. Los medios reales tienen sitios reconocibles.</p>
+      </div>
+    </div>
+
+    <div class="big-step">
+      <div class="step-num-big" style="color:var(--teal)">02</div>
+      <div class="step-body">
+        <h3>¿Lo dice alguien más?</h3>
+        <p>Si es verdad, <em>al menos 2 o 3 medios conocidos</em> lo están cubriendo. Si solo lo tiene un grupo de WhatsApp o una página desconocida, probablemente es falso.</p>
+      </div>
+    </div>
+
+    <div class="big-step">
+      <div class="step-num-big" style="color:var(--teal)">03</div>
+      <div class="step-body">
+        <h3>¿Tiene fecha y contexto?</h3>
+        <p>Muchas noticias falsas son <em>reales pero viejas</em>, sacadas de contexto. Verifica que la fecha corresponda exactamente a lo que dice que pasó.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <p class="sec-label sl-teal" style="margin-top:8px">Herramientas gratuitas para verificar</p>
+    <div style="display:flex;flex-wrap:wrap;gap:0">
+      <span class="tool-pill">🔍 Google Imágenes</span>
+      <span class="tool-pill">🔎 TinEye.com</span>
+      <span class="tool-pill">✅ verificado.mx</span>
+      <span class="tool-pill">🐕 El Sabueso (Animal Político)</span>
+    </div>
+
+    <div style="margin-top:14px;background:rgba(20,184,166,.06);border:1px solid rgba(20,184,166,.18);border-radius:10px;padding:12px 14px">
+      <p style="font-size:11px;color:var(--s4);line-height:1.6"><span style="color:var(--teal);font-weight:500">💡 Regla de oro:</span> Si te genera miedo, enojo o urgencia de reenviar inmediatamente — <em style="color:var(--w)">espera 10 minutos y verifica primero.</em> Eso es exactamente lo que quiere quien lo creó.</p>
+    </div>
+
+    <div class="card-footer">
+      <span class="footer-tag">Kit Digital · Conectadas y Seguras</span>
+      <span class="footer-logo">FINEM <span>Politics</span></span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MATERIAL 3 — 5 PROMPTS PARA CHATGPT -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="card" id="m3">
+  <div class="blob" style="width:300px;height:300px;top:-80px;right:-80px;background:radial-gradient(circle,rgba(124,58,237,.2) 0%,transparent 70%)"></div>
+  <div class="blob" style="width:280px;height:280px;bottom:-100px;left:-60px;background:radial-gradient(circle,rgba(249,115,22,.14) 0%,transparent 70%)"></div>
+
+  <div class="inner">
+    <div class="card-header">
+      <div class="kit-badge"><div class="kit-badge-dot" style="background:#A78BFA"></div><span style="color:#A78BFA">Herramienta #3</span></div>
+      <h1 class="card-title" style="font-size:24px">5 prompts listos<br><span style="color:#A78BFA">para ChatGPT</span></h1>
+      <p class="card-subtitle">Ve a <strong style="color:var(--w)">ChatGPT.com</strong> o <strong style="color:var(--w)">Gemini.google.com</strong> (gratis) y copia el texto que necesites</p>
+      <div class="title-line" style="background:#A78BFA"></div>
+    </div>
+
+    <div class="prompt-block">
+      <p class="prompt-num">Prompt 1 — Invitar a un evento</p>
+      <p class="prompt-text">"Escribe un mensaje de WhatsApp para invitar a <span class="var">[número]</span> mujeres de mi colonia a <span class="var">[tipo de evento]</span> el <span class="var">[día]</span> a las <span class="var">[hora]</span>. Tono cercano y motivador. Máximo 4 líneas."</p>
+    </div>
+
+    <div class="prompt-block">
+      <p class="prompt-num">Prompt 2 — Responder una crítica</p>
+      <p class="prompt-text">"Me escribieron esto en redes: <span class="var">[pegar el comentario]</span>. Escríbeme una respuesta profesional, sin insultos, que deje claro mi posición y cierre el tema."</p>
+    </div>
+
+    <div class="prompt-block">
+      <p class="prompt-num">Prompt 3 — Publicar un logro</p>
+      <p class="prompt-text">"Escribe una publicación de Facebook sobre este logro: <span class="var">[describe brevemente]</span>. Que sea humana, cercana y que invite a la gente a apoyar."</p>
+    </div>
+
+    <div class="prompt-block">
+      <p class="prompt-num">Prompt 4 — Verificar si algo es falso</p>
+      <p class="prompt-text">"Esta noticia me llegó por WhatsApp: <span class="var">[pega el texto]</span>. ¿Cómo puedo verificar si es real o falso? Dame 3 pasos concretos."</p>
+    </div>
+
+    <div class="prompt-block" style="margin-bottom:0">
+      <p class="prompt-num">Prompt 5 — Preparar un discurso</p>
+      <p class="prompt-text">"Ayúdame con un discurso de 2 minutos para mujeres de mi comunidad sobre <span class="var">[tema]</span>. Que tenga una historia emotiva al inicio, datos en el medio, y una llamada a la acción al final."</p>
+    </div>
+
+    <div class="card-footer">
+      <span class="footer-tag">Kit Digital · Conectadas y Seguras</span>
+      <span class="footer-logo">FINEM <span>Politics</span></span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MATERIAL 4 — APPS DE SEGURIDAD -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="card" id="m4">
+  <div class="blob" style="width:320px;height:320px;top:-100px;left:-80px;background:radial-gradient(circle,rgba(59,130,246,.18) 0%,transparent 70%)"></div>
+  <div class="blob" style="width:280px;height:280px;bottom:-80px;right:-60px;background:radial-gradient(circle,rgba(20,184,166,.14) 0%,transparent 70%)"></div>
+
+  <div class="inner">
+    <div class="card-header">
+      <div class="kit-badge"><div class="kit-badge-dot" style="background:var(--blue)"></div><span style="color:var(--blue)">Herramienta #4</span></div>
+      <h1 class="card-title" style="font-size:26px">Apps de<br><span style="color:var(--blue)">seguridad personal</span></h1>
+      <p class="card-subtitle">Tecnología que trabaja para protegerte — todas gratuitas</p>
+      <div class="title-line" style="background:var(--blue)"></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-icon orange">🚨</div>
+      <div class="app-info">
+        <h4>Noonlight</h4>
+        <p>Botón de pánico silencioso. Si activas la alerta y no la cancelas, llama automáticamente a emergencias y manda tu ubicación a contactos de confianza.</p>
+        <span class="free-badge">Gratis · iOS y Android</span>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-icon teal">📡</div>
+      <div class="app-info">
+        <h4>bSafe — Personal Safety App</h4>
+        <p>GPS en tiempo real compartido con familia. Botón de SOS con grabación automática de audio y video que se envía a tus contactos.</p>
+        <span class="free-badge">Gratis · iOS y Android</span>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-icon blue">👨‍👩‍👧</div>
+      <div class="app-info">
+        <h4>Google Family Sharing / Compartir ubicación</h4>
+        <p>Comparte tu ubicación en tiempo real con personas de confianza. Simple, sin apps adicionales, funciona directo desde Google Maps.</p>
+        <span class="free-badge">Gratis · Android e iOS</span>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-icon purple">🔐</div>
+      <div class="app-info">
+        <h4>Google Authenticator / Autenticador 2FA</h4>
+        <p>Doble verificación para todas tus cuentas importantes. Aunque roben tu contraseña, no pueden entrar sin este código.</p>
+        <span class="free-badge">Gratis · Android e iOS</span>
+      </div>
+    </div>
+
+    <div class="sos-card">
+      <h3>⚡ SOS de emergencia — Configúralo ahora</h3>
+      <p><em>Ajustes → Seguridad → SOS de emergencia.</em><br>
+      Presiona el botón de encendido <em>5 veces seguidas</em> → llama al 911 y manda tu ubicación a tus contactos de confianza.<br>
+      <span style="color:var(--s5);font-size:10px;margin-top:4px;display:block">Disponible en iPhone (iOS 11+) y Android (8.0+)</span></p>
+    </div>
+
+    <div class="card-footer">
+      <span class="footer-tag">Kit Digital · Conectadas y Seguras</span>
+      <span class="footer-logo">FINEM <span>Politics</span></span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MATERIAL 5 — QR + RECURSOS + RED DE APOYO -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="card" id="m5">
+  <div class="blob" style="width:400px;height:400px;top:-150px;right:-100px;background:radial-gradient(circle,rgba(249,115,22,.2) 0%,transparent 70%)"></div>
+  <div class="blob" style="width:350px;height:350px;bottom:-120px;left:-80px;background:radial-gradient(circle,rgba(124,58,237,.16) 0%,transparent 70%)"></div>
+  <div style="position:absolute;width:400px;height:400px;border-radius:50%;border:1px solid rgba(249,115,22,.05);top:50%;left:50%;transform:translate(-50%,-50%);z-index:0"></div>
+
+  <div class="inner">
+    <div class="card-header">
+      <div class="kit-badge"><div class="kit-badge-dot"></div>Herramienta #5</div>
+      <h1 class="card-title" style="font-size:24px">Recursos <span>&</span><br>Red de apoyo</h1>
+      <p class="card-subtitle">Escanea el QR, únete al grupo y nunca enfrentes un ataque digital sola</p>
+      <div class="title-line"></div>
+    </div>
+
+    <!-- QR Code -->
+    <div class="qr-wrap">
+      <div id="qr-canvas"></div>
+      <p class="qr-label">Grupo Conectadas y Seguras · PAN QRoo</p>
+      <p class="qr-url">bit.ly/conectadas-qroo</p>
+    </div>
+
+    <!-- Recursos digitales -->
+    <p class="sec-label sl-orange" style="margin-top:4px">Recursos digitales verificados</p>
+    <div style="background:var(--glass);border:1px solid var(--gb);border-radius:12px;padding:12px 14px;margin-bottom:10px">
+      <div class="res-item">
+        <div class="res-dot orange"></div>
+        <div class="res-text"><h4>verificado.mx</h4><p>Fact-checking especializado en México, en tiempo real</p></div>
+      </div>
+      <div class="res-item">
+        <div class="res-dot orange"></div>
+        <div class="res-text"><h4>Animal Político — El Sabueso</h4><p>Verificación de declaraciones y noticias políticas</p></div>
+      </div>
+      <div class="res-item">
+        <div class="res-dot teal"></div>
+        <div class="res-text"><h4>ChatGPT.com · Gemini.google.com</h4><p>IA gratuita para redactar, verificar y preparar discursos</p></div>
+      </div>
+      <div class="res-item">
+        <div class="res-dot purple"></div>
+        <div class="res-text"><h4>PAN Quintana Roo · Área Digital</h4><p>Reporta ataques y suplantaciones de identidad</p></div>
+      </div>
+      <div class="res-item" style="border:none">
+        <div class="res-dot blue"></div>
+        <div class="res-text"><h4>FINEM Politics</h4><p>Asesoría en comunicación digital y seguridad política</p></div>
+      </div>
+    </div>
+
+    <!-- Reglas del grupo -->
+    <div style="background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.18);border-radius:10px;padding:10px 14px">
+      <p style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--orange);margin-bottom:6px">Reglas del grupo WhatsApp</p>
+      <p style="font-size:11px;color:var(--s4);line-height:1.6">Solo información <em style="color:var(--w)">verificada</em> · Apoyo mutuo, no crítica · Si alguien sufre un ataque, <em style="color:var(--w)">el grupo actúa unido</em></p>
+    </div>
+
+    <div class="card-footer">
+      <span class="footer-tag">Kit Digital · Conectadas y Seguras · PAN QRoo</span>
+      <span class="footer-logo">FINEM <span>Politics</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- QR Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+new QRCode(document.getElementById('qr-canvas'), {
+  text: 'https://bit.ly/conectadas-qroo',
+  width: 140,
+  height: 140,
+  colorDark: '#020410',
+  colorLight: '#ffffff',
+  correctLevel: QRCode.CorrectLevel.M
+});
+</script>
+</body>
+</html>
